@@ -11,78 +11,63 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
 /* =========================
+   ELEMENTS
+========================= */
+
+const btn = document.getElementById("googleLogin");
+const status = document.getElementById("status");
+
+/* =========================
    GOOGLE LOGIN
 ========================= */
 
-const googleBtn = document.getElementById("googleLogin");
+btn.addEventListener("click", async () => {
 
-googleBtn.addEventListener("click", async () => {
+    // chống spam click
+    if (btn.disabled) return;
 
-    const provider = new GoogleAuthProvider();
+    btn.disabled = true;
+    status.textContent = "Đang đăng nhập...";
 
     try {
 
-        document.getElementById("status").textContent = "Đang đăng nhập...";
+        const provider = new GoogleAuthProvider();
 
         const result = await signInWithPopup(auth, provider);
 
         const user = result.user;
 
-        await setDoc(doc(db, "users", user.uid), {
-            name: user.displayName,
-            email: user.email,
-            photo: user.photoURL,
-            loginType: "google"
-        });
+        /* =========================
+           SAVE USER FIRESTORE
+        ========================= */
 
-        document.getElementById("status").textContent = "Thành công";
+        try {
+            await setDoc(doc(db, "users", user.uid), {
+                name: user.displayName,
+                email: user.email,
+                photo: user.photoURL,
+                lastLogin: Date.now(),
+                loginType: "google"
+            });
+        } catch (err) {
+            console.log("Firestore error:", err);
+        }
 
+        status.textContent = "Đăng nhập thành công";
+
+        // redirect an toàn
         setTimeout(() => {
             window.location.href = "index.html";
-        }, 800);
+        }, 600);
 
     } catch (err) {
 
-        document.getElementById("status").textContent = err.message;
+        console.log(err);
+
+        status.textContent = err.message;
+
+        btn.disabled = false;
 
     }
-
-});
-
-/* =========================
-   NORMAL LOGIN (FAKE)
-========================= */
-
-const normalBtn = document.getElementById("normalLogin");
-
-normalBtn.addEventListener("click", () => {
-
-    const name = document.getElementById("name").value;
-    const username = document.getElementById("username").value;
-    const cls = document.getElementById("class").value;
-    const pass = document.getElementById("password").value;
-
-    const status = document.getElementById("status");
-
-    if (!name || !username || !cls || !pass) {
-        status.textContent = "Nhập đủ thông tin";
-        return;
-    }
-
-    // lưu tạm local
-    const userData = {
-        name,
-        username,
-        class: cls,
-        loginType: "normal"
-    };
-
-    localStorage.setItem("user", JSON.stringify(userData));
-
-    status.textContent = "Đăng nhập thành công";
-
-    setTimeout(() => {
-        window.location.href = "index.html";
-    }, 800);
 
 });
