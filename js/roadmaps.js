@@ -45,6 +45,7 @@ function renderCard(roadmap) {
 function render() {
     if (!gridEl) return;
     gridEl.innerHTML = ROADMAPS.map(renderCard).join("");
+    window.refreshATSAnimations?.(gridEl);
 }
 
 onAuthStateChanged(auth, async (user) => {

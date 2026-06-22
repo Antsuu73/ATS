@@ -60,6 +60,7 @@ function render() {
     }
 
     gridEl.innerHTML = items.map(renderCard).join("");
+    window.refreshATSAnimations?.(gridEl);
 }
 
 function setActiveFilters() {

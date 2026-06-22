@@ -269,8 +269,6 @@ a{
     background:#fff;
 
     box-shadow:0 8px 30px rgba(0,0,0,.04);
-
-    animation:float 4s ease-in-out infinite;
 }
 
 .card-header{
@@ -632,22 +630,7 @@ footer{
     transform:translateY(-4px);
 }
 
-/* Animations */
-
-@keyframes float{
-
-    0%{
-        transform:translateY(0);
-    }
-
-    50%{
-        transform:translateY(-12px);
-    }
-
-    100%{
-        transform:translateY(0);
-    }
-}
+/* Animations → css/animations.css */
 
 @keyframes sortMove{
 
@@ -658,22 +641,6 @@ footer{
     to{
         opacity:1;
     }
-}
-
-.fade-up{
-
-    opacity:0;
-
-    transform:translateY(30px);
-
-    transition:all .8s ease;
-}
-
-.fade-up.show{
-
-    opacity:1;
-
-    transform:translateY(0);
 }
 
 /* Responsive */

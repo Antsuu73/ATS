@@ -167,6 +167,7 @@ function render() {
     renderStats();
     renderList();
     renderPagination();
+    window.refreshATSAnimations?.();
 }
 
 function setActiveFilterButtons() {

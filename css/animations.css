@@ -1,0 +1,285 @@
+/* Shared animations — ATS */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Page load */
+
+body {
+    opacity: 0;
+    transition: opacity 0.35s ease;
+}
+
+body.page-ready {
+    opacity: 1;
+}
+
+/* Scroll reveal */
+
+.reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+        opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+    transition-delay: var(--reveal-delay, 0s);
+}
+
+.reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.reveal-fade {
+    transform: none;
+}
+
+.reveal-scale {
+    transform: scale(0.96);
+}
+
+.reveal-scale.is-visible {
+    transform: scale(1);
+}
+
+/* Hero entrance (index) */
+
+.hero-animate > * {
+    opacity: 0;
+    animation: ats-fade-up 0.75s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.hero-animate > *:nth-child(1) { animation-delay: 0.05s; }
+.hero-animate > *:nth-child(2) { animation-delay: 0.15s; }
+.hero-animate > *:nth-child(3) { animation-delay: 0.25s; }
+.hero-animate > *:nth-child(4) { animation-delay: 0.35s; }
+
+/* Hero card float after reveal */
+
+.hero-card.reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+    animation: ats-float-margin 5s ease-in-out infinite;
+}
+
+@keyframes ats-float-margin {
+    0%, 100% { margin-top: 0; }
+    50% { margin-top: -10px; }
+}
+
+/* Navbar */
+
+.navbar {
+    transition: box-shadow 0.25s ease, background 0.25s ease;
+}
+
+.navbar.navbar--scrolled {
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+    background: rgba(255, 255, 255, 0.97);
+    backdrop-filter: blur(8px);
+}
+
+/* Nav links */
+
+.nav-menu a {
+    position: relative;
+}
+
+.nav-menu a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    width: 0;
+    height: 2px;
+    background: var(--blue);
+    border-radius: 2px;
+    transition: width 0.25s ease;
+}
+
+.nav-menu a:hover::after,
+.nav-menu a.active::after {
+    width: 100%;
+}
+
+.logo {
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.logo:hover {
+    transform: scale(1.04);
+}
+
+.filter-btn {
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.filter-btn:hover {
+    transform: translateY(-1px);
+}
+
+.filter-btn.active {
+    transform: scale(1.02);
+}
+
+/* Cards & interactive */
+
+.card,
+.lesson-card,
+.viz-card,
+.roadmap-card {
+    transition:
+        transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.28s ease,
+        border-color 0.28s ease;
+}
+
+.card:hover,
+.lesson-card:hover,
+.viz-card:hover,
+.roadmap-card:hover {
+    transform: translateY(-6px);
+}
+
+.btn-primary,
+.btn-secondary,
+.btn-login,
+.btn-lesson,
+.btn-step,
+.viz-btn,
+.google-btn {
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease,
+        filter 0.2s ease;
+}
+
+.btn-primary:hover,
+.btn-secondary:hover,
+.btn-login:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.22);
+}
+
+.btn-primary:active,
+.btn-secondary:active,
+.btn-login:active {
+    transform: translateY(0);
+}
+
+/* Progress pulse */
+
+@keyframes ats-progress-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.45); }
+    70% { box-shadow: 0 0 0 10px rgba(22, 163, 74, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0); }
+}
+
+.progress-pulse .progress-fill,
+.progress-pulse .line-fill {
+    animation: ats-progress-pulse 0.8s ease;
+}
+
+/* Tags */
+
+.tags span {
+    transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.tags span:hover {
+    transform: translateY(-2px) scale(1.04);
+}
+
+/* Visualizer preview bars */
+
+.bar {
+    transition: height 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.bars .bar {
+    animation: ats-bar-dance 2.4s ease-in-out infinite alternate;
+}
+
+.bars .bar:nth-child(1) { animation-delay: 0s; }
+.bars .bar:nth-child(2) { animation-delay: 0.15s; }
+.bars .bar:nth-child(3) { animation-delay: 0.3s; }
+.bars .bar:nth-child(4) { animation-delay: 0.45s; }
+.bars .bar:nth-child(5) { animation-delay: 0.6s; }
+
+/* Binary search demo */
+
+.binary-search span {
+    transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease;
+}
+
+.binary-search .active {
+    animation: ats-pulse-scale 1.2s ease-in-out infinite;
+}
+
+/* Login */
+
+.login-page .login-card {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+    animation: ats-fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.1s forwards;
+}
+
+/* Stat counter */
+
+.stat-card h2.counter {
+    transition: color 0.3s ease;
+}
+
+.stat-card:hover h2.counter {
+    color: var(--blue-dark);
+}
+
+/* Keyframes */
+
+@keyframes ats-fade-up {
+    from {
+        opacity: 0;
+        transform: translateY(24px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes ats-bar-dance {
+    from { opacity: 0.75; transform: scaleY(0.92); }
+    to { opacity: 1; transform: scaleY(1); }
+}
+
+@keyframes ats-pulse-scale {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+}
+
+/* Legacy fade-up (script.js) */
+
+.fade-up {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+        opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.fade-up.show {
+    opacity: 1;
+    transform: translateY(0);
+}

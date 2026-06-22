@@ -58,6 +58,7 @@ function render() {
     gridEl.innerHTML = items.length
         ? items.map(renderCard).join("")
         : `<div class="problems-empty">Không tìm thấy visualizer phù hợp.</div>`;
+    window.refreshATSAnimations?.(gridEl);
 }
 
 function setActiveFilters() {
