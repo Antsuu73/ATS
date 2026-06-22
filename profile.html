@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hồ sơ - ATS</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/profile.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <header class="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">ATS</a>
+
+            <nav class="nav-menu">
+                <a href="index.html">Home</a>
+                <a href="#">Roadmaps</a>
+                <a href="#">Practice</a>
+                <a href="#">Visualizers</a>
+                <a href="#">Dashboard</a>
+            </nav>
+
+            <div class="auth-area">
+                <a href="login.html" class="btn-login" id="loginBtn">Login</a>
+
+                <div id="userBox" class="user-box" style="display:none;">
+                    <div id="userDisplay" class="user-display"></div>
+                    <button id="logoutBtn" class="btn-logout" type="button">Logout</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="profile-page">
+        <div class="container">
+            <div id="profileLoading" class="profile-loading">Đang tải hồ sơ...</div>
+            <div id="profileCard" class="profile-card" style="display:none;"></div>
+        </div>
+    </main>
+
+    <script type="module" src="js/auth.js"></script>
+    <script type="module" src="js/profile.js"></script>
+</body>
+
+</html>

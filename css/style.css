@@ -102,6 +102,75 @@ a{
     background:var(--blue-dark);
 }
 
+/* Auth area */
+
+.auth-area{
+    display:flex;
+    align-items:center;
+}
+
+.user-box{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.user-profile-link{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:4px 8px 4px 4px;
+    border-radius:999px;
+    transition:.2s;
+}
+
+.user-profile-link:hover{
+    background:#f3f4f6;
+}
+
+.user-avatar{
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    object-fit:cover;
+    border:2px solid #e5e7eb;
+}
+
+.user-name{
+    font-size:14px;
+    font-weight:600;
+    color:var(--text);
+    max-width:140px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+
+.btn-logout{
+    background:transparent;
+    border:1px solid var(--border);
+    color:var(--muted);
+    padding:7px 14px;
+    border-radius:8px;
+    font-size:13px;
+    font-weight:600;
+    cursor:pointer;
+    font-family:inherit;
+    transition:.2s;
+}
+
+.btn-logout:hover{
+    border-color:#d1d5db;
+    color:var(--text);
+    background:#f9fafb;
+}
+
+@media(max-width:768px){
+    .user-name{
+        display:none;
+    }
+}
+
 /* Hero */
 
 .hero{
