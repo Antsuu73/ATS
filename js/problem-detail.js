@@ -84,17 +84,26 @@ async function handleSolve() {
     try {
         await markProblemSolved(currentUser.uid, currentProblem.id);
         solved = true;
-
-        const allProblems = await loadProblems();
-        const solvedSet = await getSolvedIds(currentUser.uid);
-
-        await updateProgressFromSolved(solvedSet, allProblems);
         renderActions();
     } catch (err) {
         console.error("Mark solved error:", err);
         btn.disabled = false;
         btn.textContent = "Đánh dấu đã giải";
-        alert("Không thể lưu trạng thái. Vui lòng thử lại.");
+        alert(err.message || "Không thể lưu trạng thái. Vui lòng thử lại.");
+        return;
+    }
+
+    try {
+        const allProblems = await loadProblems();
+        const solvedSet = await getSolvedIds(currentUser.uid);
+        solvedSet.add(String(currentProblem.id));
+
+        const progressOk = await updateProgressFromSolved(solvedSet, allProblems);
+        if (!progressOk) {
+            console.warn("Đã lưu bài giải nhưng cập nhật tiến độ thất bại.");
+        }
+    } catch (err) {
+        console.warn("Progress update after solve failed:", err);
     }
 }
 

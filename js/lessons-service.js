@@ -1,4 +1,4 @@
-import { db } from "./firebase-config.js";
+import { auth, db } from "./firebase-config.js";
 import {
     collection,
     doc,
@@ -6,6 +6,7 @@ import {
     getDocs,
     setDoc
 } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+import { ensureUserDocument, getFirestoreErrorMessage } from "./user-service.js";
 
 export async function getCompletedLessonIds(uid) {
     if (!uid) return new Set();
@@ -35,8 +36,18 @@ export async function isLessonCompleted(uid, lessonId) {
 }
 
 export async function markLessonCompleted(uid, lessonId) {
-    await setDoc(doc(db, "users", uid, "lessons", String(lessonId)), {
-        completed: true,
-        time: Date.now()
-    });
+    if (!uid || !lessonId) {
+        throw new Error("Thiếu thông tin người dùng hoặc bài học.");
+    }
+
+    try {
+        await ensureUserDocument(uid, auth.currentUser);
+        await setDoc(doc(db, "users", uid, "lessons", String(lessonId)), {
+            completed: true,
+            time: Date.now()
+        });
+    } catch (err) {
+        console.error("Mark lesson error:", err);
+        throw new Error(getFirestoreErrorMessage(err));
+    }
 }

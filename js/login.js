@@ -12,6 +12,7 @@ import {
     safeRedirect,
     getSafeAuthErrorMessage
 } from "./security.js";
+import { ensureUserDocument } from "./user-service.js";
 
 const btn = document.getElementById("googleLogin");
 const status = document.getElementById("status");
@@ -49,10 +50,11 @@ if (window.location.protocol === "file:") {
 
             if (profile) {
                 try {
+                    await ensureUserDocument(user.uid, user);
                     await setDoc(doc(db, "users", user.uid), profile, { merge: true });
                 } catch (err) {
                     console.error("Firestore error:", err);
-                    // Auth vẫn thành công dù lưu profile lỗi
+                    showStatus("Đăng nhập OK nhưng lưu hồ sơ thất bại. Tiến độ có thể không đồng bộ.", true);
                 }
             }
 

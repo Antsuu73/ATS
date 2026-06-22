@@ -1,4 +1,4 @@
-import { db } from "./firebase-config.js";
+import { auth, db } from "./firebase-config.js";
 import {
     collection,
     doc,
@@ -7,6 +7,7 @@ import {
     setDoc
 } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 import { PROBLEMS } from "./problems-data.js";
+import { ensureUserDocument, getFirestoreErrorMessage } from "./user-service.js";
 
 function normalizeProblem(raw, docId) {
     const id = String(raw.id ?? docId ?? "");
@@ -80,8 +81,18 @@ export async function isProblemSolved(uid, problemId) {
 }
 
 export async function markProblemSolved(uid, problemId) {
-    await setDoc(doc(db, "users", uid, "solved", String(problemId)), {
-        solved: true,
-        time: Date.now()
-    });
+    if (!uid || !problemId) {
+        throw new Error("Thiếu thông tin người dùng hoặc bài tập.");
+    }
+
+    try {
+        await ensureUserDocument(uid, auth.currentUser);
+        await setDoc(doc(db, "users", uid, "solved", String(problemId)), {
+            solved: true,
+            time: Date.now()
+        });
+    } catch (err) {
+        console.error("Mark solved error:", err);
+        throw new Error(getFirestoreErrorMessage(err));
+    }
 }

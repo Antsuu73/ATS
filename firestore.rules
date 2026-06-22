@@ -11,7 +11,10 @@ service cloud.firestore {
     match /users/{userId} {
       allow read: if isOwner(userId);
       allow create: if isOwner(userId) && validUserWrite(request.resource.data);
-      allow update: if isOwner(userId) && validUserWrite(request.resource.data);
+      allow update: if isOwner(userId) && (
+        validUserWrite(request.resource.data)
+        || isProgressOnlyUpdate()
+      );
       allow delete: if false;
 
       match /solved/{problemId} {
@@ -35,6 +38,11 @@ service cloud.firestore {
 
 function isOwner(userId) {
   return request.auth != null && request.auth.uid == userId;
+}
+
+function isProgressOnlyUpdate() {
+  return request.resource.data.diff(resource.data).affectedKeys().hasOnly(['progress'])
+    && validProgress(request.resource.data.progress);
 }
 
 function validUserWrite(data) {
@@ -78,5 +86,5 @@ function optionalString(data, field, maxLen) {
 function optionalHttpsUrl(data, field) {
   return !(field in data)
     || data[field] == null
-    || (data[field] is string && data[field].size() <= 500 && data[field].matches('^https://.*'));
+    || (data[field] is string && data[field].size() <= 2048 && data[field].matches('^https://.*'));
 }

@@ -106,7 +106,7 @@ async function handleComplete() {
         console.error("Complete lesson error:", err);
         btn.disabled = false;
         btn.textContent = "Đánh dấu đã học xong";
-        alert("Không thể lưu. Vui lòng thử lại.");
+        alert(err.message || "Không thể lưu. Vui lòng thử lại.");
     }
 }
 

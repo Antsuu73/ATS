@@ -5,6 +5,7 @@ import {
     getDoc,
     setDoc
 } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+import { ensureUserDocument } from "./user-service.js";
 
 const TOPICS = [
     { key: "graph", label: "Graph" },
@@ -116,6 +117,7 @@ export async function updateTopicProgress(topicKey, percent) {
     };
 
     try {
+        await ensureUserDocument(user.uid, user);
         await setDoc(doc(db, "users", user.uid), {
             progress: updated
         }, { merge: true });
@@ -144,6 +146,7 @@ export async function updateProgressFromSolved(solvedIds, allProblems) {
     });
 
     try {
+        await ensureUserDocument(user.uid, user);
         await setDoc(doc(db, "users", user.uid), {
             progress: updated
         }, { merge: true });

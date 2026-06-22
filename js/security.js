@@ -67,7 +67,7 @@ export function sanitizeUserProfile(user) {
     return {
         name: name || "User",
         email: email || "",
-        photo,
+        photo: photo.length > 500 ? photo.slice(0, 500) : photo,
         lastLogin: Date.now(),
         loginType: "google"
     };
