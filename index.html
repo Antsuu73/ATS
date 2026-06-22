@@ -92,33 +92,33 @@
                         Progress
                     </span>
 
-                    <span class="green">
-                        72%
+                    <span class="green" id="heroProgressPercent">
+                        0%
                     </span>
 
                 </div>
 
                 <div class="progress-bar">
 
-                    <div class="progress-fill"></div>
+                    <div class="progress-fill" id="heroProgressFill" style="width:0%"></div>
 
                 </div>
 
                 <div class="progress-list">
 
-                    <div>
+                    <div data-topic="graph">
                         <span>Graph</span>
-                        <span>90%</span>
+                        <span class="topic-percent">0%</span>
                     </div>
 
-                    <div>
+                    <div data-topic="dp">
                         <span>DP</span>
-                        <span>60%</span>
+                        <span class="topic-percent">0%</span>
                     </div>
 
-                    <div>
+                    <div data-topic="tree">
                         <span>Tree</span>
-                        <span>35%</span>
+                        <span class="topic-percent">0%</span>
                     </div>
 
                 </div>
@@ -179,41 +179,41 @@
 
             <div class="progress-wrapper">
 
-                <div class="topic-progress">
+                <div class="topic-progress" data-topic="graph">
 
                     <div class="topic-title">
                         <span>Graph</span>
-                        <span>80%</span>
+                        <span class="topic-percent">0%</span>
                     </div>
 
                     <div class="line">
-                        <div class="line-fill green-fill w80"></div>
+                        <div class="line-fill green-fill" style="width:0%"></div>
                     </div>
 
                 </div>
 
-                <div class="topic-progress">
+                <div class="topic-progress" data-topic="dp">
 
                     <div class="topic-title">
                         <span>Dynamic Programming</span>
-                        <span>45%</span>
+                        <span class="topic-percent">0%</span>
                     </div>
 
                     <div class="line">
-                        <div class="line-fill blue-fill w45"></div>
+                        <div class="line-fill blue-fill" style="width:0%"></div>
                     </div>
 
                 </div>
 
-                <div class="topic-progress">
+                <div class="topic-progress" data-topic="tree">
 
                     <div class="topic-title">
                         <span>Tree</span>
-                        <span>25%</span>
+                        <span class="topic-percent">0%</span>
                     </div>
 
                     <div class="line">
-                        <div class="line-fill red-fill w25"></div>
+                        <div class="line-fill red-fill" style="width:0%"></div>
                     </div>
 
                 </div>
@@ -575,6 +575,7 @@
 
     <script src="js/script.js"></script>
     <script type="module" src="js/auth.js"></script>
+    <script type="module" src="js/progress.js"></script>
 </body>
 
 </html>

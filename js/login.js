@@ -48,7 +48,7 @@ btn.addEventListener("click", async () => {
                 photo: user.photoURL,
                 lastLogin: Date.now(),
                 loginType: "google"
-            });
+            }, { merge: true });
         } catch (err) {
             console.log("Firestore error:", err);
         }
