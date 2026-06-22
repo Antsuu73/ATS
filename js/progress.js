@@ -6,6 +6,7 @@ import {
     setDoc
 } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 import { ensureUserDocument } from "./user-service.js";
+import { getSolvedIds, loadProblems } from "./problems-service.js";
 
 const TOPICS = [
     { key: "graph", label: "Graph" },
@@ -23,6 +24,40 @@ function computeOverall(progress) {
     const values = TOPICS.map((t) => clampPercent(progress[t.key]));
     if (values.every((v) => v === 0)) return 0;
     return Math.round(values.reduce((sum, v) => sum + v, 0) / values.length);
+}
+
+function computeProgressFromSolved(solvedIds, allProblems) {
+    const solvedSet = new Set([...solvedIds].map(String));
+    const updated = {};
+
+    TOPICS.forEach((topic) => {
+        const inTopic = allProblems.filter((p) => p.topic === topic.key);
+        const solvedCount = inTopic.filter((p) => solvedSet.has(String(p.id))).length;
+        updated[topic.key] = inTopic.length
+            ? clampPercent((solvedCount / inTopic.length) * 100)
+            : 0;
+    });
+
+    return updated;
+}
+
+async function resolveProgress(uid) {
+    try {
+        const [solvedIds, allProblems, stored] = await Promise.all([
+            getSolvedIds(uid),
+            loadProblems(),
+            fetchUserProgress(uid)
+        ]);
+
+        if (solvedIds.size > 0) {
+            return computeProgressFromSolved(solvedIds, allProblems);
+        }
+
+        return stored;
+    } catch (err) {
+        console.error("Progress resolve error:", err);
+        return fetchUserProgress(uid);
+    }
 }
 
 async function fetchUserProgress(uid) {
@@ -97,7 +132,7 @@ function renderProgress(progress) {
 
 onAuthStateChanged(auth, async (user) => {
     const progress = user
-        ? await fetchUserProgress(user.uid)
+        ? await resolveProgress(user.uid)
         : { ...DEFAULT_PROGRESS };
 
     renderProgress(progress);
@@ -125,6 +160,11 @@ export async function updateTopicProgress(topicKey, percent) {
         renderProgress(updated);
         return true;
     } catch (err) {
+        if (err?.code === "permission-denied") {
+            console.warn("Không lưu được progress lên Firestore — deploy firestore.rules.");
+            renderProgress(updated);
+            return true;
+        }
         console.error("Progress save error:", err);
         return false;
     }
@@ -134,16 +174,7 @@ export async function updateProgressFromSolved(solvedIds, allProblems) {
     const user = auth.currentUser;
     if (!user) return false;
 
-    const solvedSet = new Set([...solvedIds].map(String));
-    const updated = {};
-
-    TOPICS.forEach((topic) => {
-        const inTopic = allProblems.filter((p) => p.topic === topic.key);
-        const solvedCount = inTopic.filter((p) => solvedSet.has(String(p.id))).length;
-        updated[topic.key] = inTopic.length
-            ? clampPercent((solvedCount / inTopic.length) * 100)
-            : 0;
-    });
+    const updated = computeProgressFromSolved(solvedIds, allProblems);
 
     try {
         await ensureUserDocument(user.uid, user);
@@ -154,6 +185,11 @@ export async function updateProgressFromSolved(solvedIds, allProblems) {
         renderProgress(updated);
         return true;
     } catch (err) {
+        if (err?.code === "permission-denied") {
+            console.warn("Không lưu được progress lên Firestore — deploy firestore.rules.");
+            renderProgress(updated);
+            return true;
+        }
         console.error("Progress sync error:", err);
         return false;
     }

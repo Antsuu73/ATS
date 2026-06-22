@@ -3,88 +3,30 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    // Bài tập — ai cũng đọc được
     match /problems/{problemId} {
       allow read: if true;
       allow write: if false;
     }
 
+    // Hồ sơ + tiến độ người dùng
     match /users/{userId} {
-      allow read: if isOwner(userId);
-      allow create: if isOwner(userId) && validUserWrite(request.resource.data);
-      allow update: if isOwner(userId) && (
-        validUserWrite(request.resource.data)
-        || isProgressOnlyUpdate()
-      );
+      allow read, create, update: if isOwner(userId);
       allow delete: if false;
 
       match /solved/{problemId} {
-        allow read: if isOwner(userId);
-        allow create, update: if isOwner(userId) && validSolvedRecord(request.resource.data);
+        allow read, create, update: if isOwner(userId);
         allow delete: if false;
       }
 
       match /lessons/{lessonId} {
-        allow read: if isOwner(userId);
-        allow create, update: if isOwner(userId) && validLessonRecord(request.resource.data);
+        allow read, create, update: if isOwner(userId);
         allow delete: if false;
       }
-    }
-
-    match /{document=**} {
-      allow read, write: if false;
     }
   }
 }
 
 function isOwner(userId) {
   return request.auth != null && request.auth.uid == userId;
-}
-
-function isProgressOnlyUpdate() {
-  return request.resource.data.diff(resource.data).affectedKeys().hasOnly(['progress'])
-    && validProgress(request.resource.data.progress);
-}
-
-function validUserWrite(data) {
-  return !data.keys().hasAny(['role', 'isAdmin', 'admin', 'solvedCount'])
-    && optionalString(data, 'name', 120)
-    && optionalString(data, 'email', 254)
-    && optionalHttpsUrl(data, 'photo')
-    && (!('lastLogin' in data) || data.lastLogin is number)
-    && (!('loginType' in data) || data.loginType == 'google')
-    && (!('progress' in data) || validProgress(data.progress));
-}
-
-function validProgress(progress) {
-  return progress is map
-    && progress.keys().hasOnly(['graph', 'dp', 'tree'])
-    && validPercent(progress, 'graph')
-    && validPercent(progress, 'dp')
-    && validPercent(progress, 'tree');
-}
-
-function validPercent(mapData, key) {
-  return !(key in mapData) || (mapData[key] is number && mapData[key] >= 0 && mapData[key] <= 100);
-}
-
-function validSolvedRecord(data) {
-  return data.keys().hasOnly(['solved', 'time'])
-    && data.solved == true
-    && data.time is number;
-}
-
-function validLessonRecord(data) {
-  return data.keys().hasOnly(['completed', 'time'])
-    && data.completed == true
-    && data.time is number;
-}
-
-function optionalString(data, field, maxLen) {
-  return !(field in data) || data[field] == null || (data[field] is string && data[field].size() <= maxLen);
-}
-
-function optionalHttpsUrl(data, field) {
-  return !(field in data)
-    || data[field] == null
-    || (data[field] is string && data[field].size() <= 2048 && data[field].matches('^https://.*'));
 }

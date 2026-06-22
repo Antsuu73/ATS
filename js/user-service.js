@@ -35,7 +35,9 @@ export function getFirestoreErrorMessage(err) {
     const code = err?.code || "";
 
     const messages = {
-        "permission-denied": "Không có quyền lưu dữ liệu. Hãy đăng nhập lại hoặc liên hệ quản trị viên.",
+        "permission-denied":
+            "Firestore chưa cho phép ghi dữ liệu. Tiến độ đã lưu tạm trên trình duyệt. " +
+            "Admin cần deploy rules: firebase deploy --only firestore:rules --project ats-2f1b4",
         "unavailable": "Firestore tạm thời không khả dụng. Thử lại sau vài giây.",
         "failed-precondition": "Dữ liệu không hợp lệ. Vui lòng tải lại trang.",
         "unauthenticated": "Phiên đăng nhập hết hạn. Vui lòng đăng nhập lại."
