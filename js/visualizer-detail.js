@@ -2,9 +2,17 @@ import { getVisualizerById, TOPIC_LABELS } from "./visualizers-data.js";
 import {
     createBarSortEngine,
     createBinarySearchEngine,
+    createLinearSearchEngine,
     createBfsEngine,
     createDfsEngine,
     createDijkstraEngine,
+    createTopoSortEngine,
+    createKnapsackEngine,
+    createCoinChangeEngine,
+    createLisEngine,
+    createStackEngine,
+    createQueueEngine,
+    createTreeBfsEngine,
     clampSpeed,
     sleep
 } from "./visualizer-engines.js";
@@ -19,7 +27,23 @@ const notFoundEl = document.getElementById("vizNotFound");
 let engine = null;
 let playing = false;
 
-function mountControls(panel, options = {}) {
+const ENGINE_MAP = {
+    "bar-sort": (stage, logEl, viz) => createBarSortEngine(stage, logEl, viz.algo || "bubble"),
+    "binary-search": createBinarySearchEngine,
+    "linear-search": createLinearSearchEngine,
+    bfs: createBfsEngine,
+    dfs: createDfsEngine,
+    dijkstra: createDijkstraEngine,
+    "topo-sort": createTopoSortEngine,
+    knapsack: createKnapsackEngine,
+    "coin-change": createCoinChangeEngine,
+    lis: createLisEngine,
+    stack: createStackEngine,
+    queue: createQueueEngine,
+    "tree-bfs": createTreeBfsEngine
+};
+
+function mountControls(options = {}) {
     const { showTarget = false, showSpeed = true } = options;
 
     return `
@@ -99,52 +123,34 @@ function bindControls(initEngine) {
     });
 }
 
-function renderBubbleSort(viz) {
-    const algo = viz.id === "insertion-sort" ? "insertion" : "bubble";
-    contentEl.innerHTML = `
-        <a href="visualizers.html" class="viz-back">← Tất cả visualizers</a>
-        <div class="viz-panel">
-            <header class="viz-panel-head">
-                <span class="topic-badge">${TOPIC_LABELS[viz.topic]}</span>
-                <h1>${viz.title}</h1>
-                <p>${viz.description}</p>
-            </header>
-            <div class="viz-stage"><div class="viz-bars"></div></div>
-            ${mountControls()}
-        </div>
-    `;
-    const stage = contentEl.querySelector(".viz-stage");
-    bindControls((logEl) => createBarSortEngine(stage, logEl, algo));
+function getStageType(engineType) {
+    if (engineType === "bar-sort") return "bars";
+    if (["binary-search", "linear-search", "lis"].includes(engineType)) return "array";
+    if (["knapsack", "coin-change", "stack", "queue"].includes(engineType)) return "custom";
+    return "graph";
 }
 
-function renderBinarySearch(viz) {
-    contentEl.innerHTML = `
-        <a href="visualizers.html" class="viz-back">← Tất cả visualizers</a>
-        <div class="viz-panel">
-            <header class="viz-panel-head">
-                <span class="topic-badge">${TOPIC_LABELS[viz.topic]}</span>
-                <h1>${viz.title}</h1>
-                <p>${viz.description}</p>
-            </header>
-            <div class="viz-stage" style="align-items:center"><div class="viz-array"></div></div>
-            ${mountControls({ showTarget: true, showSpeed: true })}
-        </div>
-    `;
-    const stage = contentEl.querySelector(".viz-stage");
-    bindControls((logEl) => createBinarySearchEngine(stage, logEl));
-}
+function renderVisualizer(viz) {
+    document.title = `${viz.title} - Visualizer ATS`;
+    const stageType = getStageType(viz.engine);
+    const showTarget = viz.engine === "binary-search" || viz.engine === "linear-search";
 
-function renderGraph(viz, factory) {
+    let stageHtml = "";
+    if (stageType === "bars") stageHtml = `<div class="viz-stage"><div class="viz-bars"></div></div>`;
+    else if (stageType === "array") stageHtml = `<div class="viz-stage" style="align-items:center"><div class="viz-array"></div></div>`;
+    else if (stageType === "custom") stageHtml = `<div class="viz-stage viz-stage-custom" id="customMount"></div>`;
+    else stageHtml = `<div class="viz-stage graph-stage" id="graphMount"></div>`;
+
     contentEl.innerHTML = `
         <a href="visualizers.html" class="viz-back">← Tất cả visualizers</a>
         <div class="viz-panel">
             <header class="viz-panel-head">
-                <span class="topic-badge">${TOPIC_LABELS[viz.topic]}</span>
+                <span class="topic-badge">${TOPIC_LABELS[viz.topic] || viz.topic}</span>
                 <h1>${viz.title}</h1>
                 <p>${viz.description}</p>
             </header>
-            <div class="viz-stage graph-stage" id="graphMount"></div>
-            ${mountControls({ showSpeed: true })}
+            ${stageHtml}
+            ${mountControls({ showTarget, showSpeed: true })}
             ${viz.relatedLessonId ? `
                 <div class="viz-related">
                     <a href="lesson.html?id=${viz.relatedLessonId}">📖 Đọc bài học liên quan</a>
@@ -152,24 +158,20 @@ function renderGraph(viz, factory) {
             ` : ""}
         </div>
     `;
-    const stage = contentEl.querySelector("#graphMount");
-    bindControls((logEl) => factory(stage, logEl));
-}
 
-function renderVisualizer(viz) {
-    document.title = `${viz.title} - Visualizer ATS`;
+    const factory = ENGINE_MAP[viz.engine];
+    if (!factory) return;
 
-    if (viz.id === "bubble-sort" || viz.id === "insertion-sort") {
-        renderBubbleSort(viz);
-    } else if (viz.id === "binary-search") {
-        renderBinarySearch(viz);
-    } else if (viz.id === "bfs") {
-        renderGraph(viz, createBfsEngine);
-    } else if (viz.id === "dfs") {
-        renderGraph(viz, createDfsEngine);
-    } else if (viz.id === "dijkstra") {
-        renderGraph(viz, createDijkstraEngine);
-    }
+    let stage;
+    if (stageType === "bars") stage = contentEl.querySelector(".viz-stage");
+    else if (stageType === "array") stage = contentEl.querySelector(".viz-stage");
+    else if (stageType === "custom") stage = contentEl.querySelector("#customMount");
+    else stage = contentEl.querySelector("#graphMount");
+
+    bindControls((logEl) => {
+        if (viz.engine === "bar-sort") return factory(stage, logEl, viz);
+        return factory(stage, logEl);
+    });
 
     loadingEl.style.display = "none";
     notFoundEl.style.display = "none";
