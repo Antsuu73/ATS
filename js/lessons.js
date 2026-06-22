@@ -2,6 +2,7 @@ import { auth } from "./firebase-config.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
 import { getCompletedLessonIds } from "./lessons-service.js";
 import { LESSONS, TOPIC_LABELS } from "./lessons-data.js";
+import { getVisualizerByLessonId } from "./visualizers-data.js";
 
 let completedIds = new Set();
 let filters = { topic: "all", search: "" };
@@ -32,11 +33,13 @@ function getFilteredLessons() {
 
 function renderCard(lesson) {
     const done = completedIds.has(lesson.id);
+    const viz = getVisualizerByLessonId(lesson.id);
 
     return `
         <a href="lesson.html?id=${lesson.id}" class="lesson-card${done ? " done" : ""}">
             <div class="lesson-card-top">
                 <span class="topic-badge">${TOPIC_LABELS[lesson.topic]}</span>
+                ${viz ? `<span class="lesson-viz-badge">Visualizer</span>` : ""}
                 ${done ? `<span class="lesson-done-badge">✓ Đã học</span>` : ""}
             </div>
             <h3>${lesson.title}</h3>

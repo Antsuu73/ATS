@@ -1,4 +1,5 @@
 import { getVisualizerById, TOPIC_LABELS } from "./visualizers-data.js";
+import { LESSONS } from "./lessons-data.js";
 import {
     createBarSortEngine,
     createBinarySearchEngine,
@@ -23,6 +24,13 @@ const vizId = params.get("id");
 const loadingEl = document.getElementById("vizLoading");
 const contentEl = document.getElementById("vizContent");
 const notFoundEl = document.getElementById("vizNotFound");
+
+function getRelatedProblemLink(lessonId) {
+    const lesson = LESSONS.find((l) => l.id === lessonId);
+    if (!lesson?.relatedProblemId) return "";
+
+    return `<a href="problem.html?id=${lesson.relatedProblemId}">✏️ Luyện tập bài liên quan</a>`;
+}
 
 let engine = null;
 let playing = false;
@@ -154,6 +162,7 @@ function renderVisualizer(viz) {
             ${viz.relatedLessonId ? `
                 <div class="viz-related">
                     <a href="lesson.html?id=${viz.relatedLessonId}">📖 Đọc bài học liên quan</a>
+                    ${getRelatedProblemLink(viz.relatedLessonId)}
                 </div>
             ` : ""}
         </div>

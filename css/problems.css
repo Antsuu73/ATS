@@ -339,6 +339,23 @@
     cursor: not-allowed;
 }
 
+.btn-solve-outline {
+    background: #fff;
+    color: var(--blue);
+    border: 1px solid var(--blue);
+    text-decoration: none;
+    display: inline-block;
+    padding: 12px 22px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 15px;
+    transition: 0.2s;
+}
+
+.btn-solve-outline:hover {
+    background: #eff6ff;
+}
+
 .solved-banner {
     display: inline-flex;
     align-items: center;

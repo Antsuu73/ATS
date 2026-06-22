@@ -7,6 +7,7 @@ import {
     getPracticeSteps,
     computeRoadmapProgress
 } from "./roadmaps-data.js";
+import { getVisualizerById } from "./visualizers-data.js";
 
 const params = new URLSearchParams(window.location.search);
 const roadmapId = params.get("id");
@@ -25,17 +26,25 @@ function getProblemTitle(problemId) {
     return p ? p.title : `Bài #${problemId}`;
 }
 
-function renderStep(step, index, total) {
+function renderStep(step, index) {
     const isPractice = step.type === "practice";
-    const isDone = isPractice && solvedIds.has(String(step.problemId));
-    const stepClass = isDone ? "step-done" : `step-${step.type}`;
-    const typeLabel = isPractice ? "Luyện tập" : "Lý thuyết";
-    const typeClass = isPractice ? "type-practice" : "type-learn";
-    const dotContent = isDone ? "✓" : String(index + 1);
+    const isVisualize = step.type === "visualize";
 
+    let stepClass = `step-${step.type}`;
+    let typeLabel = "Lý thuyết";
+    let typeClass = "type-learn";
+    let dotContent = String(index + 1);
     let actions = "";
 
     if (isPractice) {
+        const isDone = solvedIds.has(String(step.problemId));
+        typeLabel = "Luyện tập";
+        typeClass = "type-practice";
+        if (isDone) {
+            stepClass = "step-done";
+            dotContent = "✓";
+        }
+
         const status = isDone
             ? `<span class="step-status">✓ Đã hoàn thành</span>`
             : `<span class="step-status" style="color:var(--muted)">Chưa giải</span>`;
@@ -48,8 +57,26 @@ function renderStep(step, index, total) {
                 ${status}
             </div>
         `;
+    } else if (isVisualize) {
+        typeLabel = "Mô phỏng";
+        typeClass = "type-visualize";
+        const viz = getVisualizerById(step.visualizerId);
+        const vizTitle = viz ? viz.title : step.title;
+
+        actions = `
+            <div class="roadmap-step-actions">
+                <a href="visualizer.html?id=${step.visualizerId}" class="btn-step btn-step-viz">
+                    Mở visualizer: ${vizTitle}
+                </a>
+            </div>
+        `;
     } else if (step.lessonId) {
         const lessonDone = completedLessonIds.has(step.lessonId);
+        if (lessonDone) {
+            stepClass = "step-done";
+            dotContent = "✓";
+        }
+
         const status = lessonDone
             ? `<span class="step-status">✓ Đã học</span>`
             : `<span class="step-status" style="color:var(--muted)">Chưa học</span>`;
@@ -62,17 +89,6 @@ function renderStep(step, index, total) {
                 ${status}
             </div>
         `;
-    } else if (index < total - 1) {
-        const next = currentRoadmap.steps[index + 1];
-        if (next?.type === "practice") {
-            actions = `
-                <div class="roadmap-step-actions">
-                    <a href="problem.html?id=${next.problemId}" class="btn-step btn-step-outline">
-                        Tiếp theo: làm bài tập
-                    </a>
-                </div>
-            `;
-        }
     }
 
     return `
@@ -93,6 +109,7 @@ function renderRoadmap(roadmap) {
     const progress = computeRoadmapProgress(roadmap, solvedIds);
     const solvedCount = practice.filter((s) => solvedIds.has(String(s.problemId))).length;
     const learnCount = roadmap.steps.filter((s) => s.type === "learn").length;
+    const vizCount = roadmap.steps.filter((s) => s.type === "visualize").length;
 
     document.title = `${roadmap.title} - Roadmap ATS`;
 
@@ -106,6 +123,7 @@ function renderRoadmap(roadmap) {
 
             <div class="roadmap-hero-stats">
                 <span><strong>${learnCount}</strong> bước lý thuyết</span>
+                <span><strong>${vizCount}</strong> visualizers</span>
                 <span><strong>${practice.length}</strong> bài luyện tập</span>
                 <span>Đã giải: <strong>${solvedCount}/${practice.length}</strong></span>
                 <span>Tiến độ: <strong>${progress}%</strong></span>
@@ -121,7 +139,7 @@ function renderRoadmap(roadmap) {
         <div class="roadmap-steps">
             <h2>Lộ trình học</h2>
             <div class="roadmap-timeline">
-                ${roadmap.steps.map((step, i) => renderStep(step, i, roadmap.steps.length)).join("")}
+                ${roadmap.steps.map((step, i) => renderStep(step, i)).join("")}
             </div>
         </div>
     `;

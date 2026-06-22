@@ -1,3 +1,5 @@
+import { LESSONS } from "./lessons-data.js";
+
 export const VISUALIZERS = [
     {
         id: "bubble-sort",
@@ -170,4 +172,13 @@ export const TOPIC_LABELS = {
 
 export function getVisualizerById(id) {
     return VISUALIZERS.find((v) => v.id === id) || null;
+}
+
+export function getVisualizerByLessonId(lessonId) {
+    return VISUALIZERS.find((v) => v.relatedLessonId === lessonId) || null;
+}
+
+export function getVisualizerForProblem(problemId) {
+    const lesson = LESSONS.find((l) => String(l.relatedProblemId) === String(problemId));
+    return lesson ? getVisualizerByLessonId(lesson.id) : null;
 }

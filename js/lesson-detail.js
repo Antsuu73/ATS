@@ -6,6 +6,7 @@ import {
     markLessonCompleted
 } from "./lessons-service.js";
 import { refreshUserProgress } from "./progress.js";
+import { getVisualizerByLessonId } from "./visualizers-data.js";
 
 const params = new URLSearchParams(window.location.search);
 const lessonId = params.get("id");
@@ -57,6 +58,15 @@ function renderActions() {
     if (!actionsEl || !currentLesson) return;
 
     let html = "";
+
+    const viz = getVisualizerByLessonId(currentLesson.id);
+    if (viz) {
+        html += `
+            <a href="visualizer.html?id=${viz.id}" class="btn-lesson btn-lesson-viz">
+                Xem visualizer: ${viz.title}
+            </a>
+        `;
+    }
 
     if (currentLesson.relatedProblemId) {
         html += `

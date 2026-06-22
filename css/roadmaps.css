@@ -256,6 +256,26 @@
     color: var(--green);
 }
 
+.type-visualize {
+    background: #fef3c7;
+    color: #b45309;
+}
+
+.step-visualize .roadmap-step-dot {
+    background: #fef3c7;
+    color: #b45309;
+}
+
+.btn-step-viz {
+    background: #fef3c7;
+    color: #b45309;
+    border: 1px solid #fcd34d;
+}
+
+.btn-step-viz:hover {
+    background: #fde68a;
+}
+
 .roadmap-step-card h3 {
     font-size: 18px;
     margin-bottom: 8px;

@@ -1,3 +1,5 @@
+import { getVisualizerByLessonId } from "./visualizers-data.js";
+
 export const ROADMAPS = [
     {
         id: "graph",
@@ -161,7 +163,35 @@ export const ROADMAPS = [
 ];
 
 export function getRoadmapById(id) {
-    return ROADMAPS.find((r) => r.id === id) || null;
+    const roadmap = ROADMAPS.find((r) => r.id === id);
+    if (!roadmap) return null;
+
+    return {
+        ...roadmap,
+        steps: expandStepsWithVisualizers(roadmap.steps)
+    };
+}
+
+function expandStepsWithVisualizers(steps) {
+    const expanded = [];
+
+    steps.forEach((step) => {
+        expanded.push(step);
+
+        if (step.type !== "learn" || !step.lessonId) return;
+
+        const viz = getVisualizerByLessonId(step.lessonId);
+        if (!viz) return;
+
+        expanded.push({
+            type: "visualize",
+            title: `Mô phỏng: ${viz.title}`,
+            visualizerId: viz.id,
+            content: `Xem thuật toán chạy trực quan — ${viz.description}`
+        });
+    });
+
+    return expanded;
 }
 
 export function getPracticeSteps(roadmap) {

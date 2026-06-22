@@ -377,6 +377,11 @@ a{
     color:var(--muted);
 }
 
+.section-cta{
+    text-align:center;
+    margin-top:32px;
+}
+
 /* Learning Progress */
 
 .progress-wrapper{

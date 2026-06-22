@@ -7,6 +7,7 @@ import {
 } from "./problems-service.js";
 import { TOPIC_LABELS } from "./problems-data.js";
 import { refreshUserProgress } from "./progress.js";
+import { getVisualizerForProblem } from "./visualizers-data.js";
 import { escapeHtml } from "./security.js";
 
 const params = new URLSearchParams(window.location.search);
@@ -49,25 +50,37 @@ function renderActions() {
     const actionsEl = document.getElementById("problemActions");
     if (!actionsEl) return;
 
+    let html = "";
+
+    if (currentProblem) {
+        const viz = getVisualizerForProblem(currentProblem.id);
+        if (viz) {
+            html += `
+                <a href="visualizer.html?id=${viz.id}" class="btn-solve btn-solve-outline">
+                    Xem visualizer: ${escapeHtml(viz.title)}
+                </a>
+            `;
+        }
+    }
+
     if (!currentUser) {
-        actionsEl.innerHTML = `
+        html += `
             <p class="login-hint">
                 <a href="login.html">Đăng nhập</a> để đánh dấu bài đã giải và cập nhật tiến độ.
             </p>
         `;
+        actionsEl.innerHTML = html;
         return;
     }
 
     if (solved) {
-        actionsEl.innerHTML = `
-            <div class="solved-banner">✓ Bạn đã giải bài này</div>
-        `;
+        html += `<div class="solved-banner">✓ Bạn đã giải bài này</div>`;
+        actionsEl.innerHTML = html;
         return;
     }
 
-    actionsEl.innerHTML = `
-        <button id="solveBtn" class="btn-solve" type="button">Đánh dấu đã giải</button>
-    `;
+    html += `<button id="solveBtn" class="btn-solve" type="button">Đánh dấu đã giải</button>`;
+    actionsEl.innerHTML = html;
 
     document.getElementById("solveBtn").addEventListener("click", handleSolve);
 }
