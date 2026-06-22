@@ -50,7 +50,8 @@ export function getSafeAuthErrorMessage(err) {
         "auth/network-request-failed": "Lỗi mạng. Kiểm tra kết nối và thử lại.",
         "auth/too-many-requests": "Quá nhiều lần thử. Vui lòng đợi vài phút.",
         "auth/user-disabled": "Tài khoản đã bị vô hiệu hóa.",
-        "auth/operation-not-allowed": "Phương thức đăng nhập chưa được bật."
+        "auth/operation-not-allowed": "Phương thức đăng nhập chưa được bật.",
+        "auth/internal-error": "Lỗi xác thực. Hãy tải lại trang (Ctrl+F5) và thử lại."
     };
 
     return messages[code] || "Đăng nhập thất bại. Vui lòng thử lại.";
