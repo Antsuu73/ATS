@@ -2,13 +2,11 @@ import { auth } from "./firebase-config.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
 import {
     loadProblemById,
-    loadProblems,
     isProblemSolved,
-    markProblemSolved,
-    getSolvedIds
+    markProblemSolved
 } from "./problems-service.js";
 import { TOPIC_LABELS } from "./problems-data.js";
-import { updateProgressFromSolved } from "./progress.js";
+import { refreshUserProgress } from "./progress.js";
 import { escapeHtml } from "./security.js";
 
 const params = new URLSearchParams(window.location.search);
@@ -94,14 +92,7 @@ async function handleSolve() {
     }
 
     try {
-        const allProblems = await loadProblems();
-        const solvedSet = await getSolvedIds(currentUser.uid);
-        solvedSet.add(String(currentProblem.id));
-
-        const progressOk = await updateProgressFromSolved(solvedSet, allProblems);
-        if (!progressOk) {
-            console.warn("Đã lưu bài giải nhưng cập nhật tiến độ thất bại.");
-        }
+        await refreshUserProgress(currentUser.uid);
     } catch (err) {
         console.warn("Progress update after solve failed:", err);
     }

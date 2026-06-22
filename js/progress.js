@@ -7,6 +7,8 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 import { ensureUserDocument } from "./user-service.js";
 import { getSolvedIds, loadProblems } from "./problems-service.js";
+import { getCompletedLessonIds } from "./lessons-service.js";
+import { LESSONS } from "./lessons-data.js";
 
 const TOPICS = [
     { key: "graph", label: "Graph" },
@@ -26,16 +28,29 @@ function computeOverall(progress) {
     return Math.round(values.reduce((sum, v) => sum + v, 0) / values.length);
 }
 
-function computeProgressFromSolved(solvedIds, allProblems) {
-    const solvedSet = new Set([...solvedIds].map(String));
+function computeTopicProgress(topicKey, completedLessonIds, solvedIds, allProblems) {
+    const lessons = LESSONS.filter((l) => l.topic === topicKey);
+    const problems = allProblems.filter((p) => p.topic === topicKey);
+
+    const lessonDone = lessons.filter((l) => completedLessonIds.has(l.id)).length;
+    const problemDone = problems.filter((p) => solvedIds.has(String(p.id))).length;
+
+    const total = lessons.length + problems.length;
+    if (!total) return 0;
+
+    return clampPercent(((lessonDone + problemDone) / total) * 100);
+}
+
+function computeFullProgress(completedLessonIds, solvedIds, allProblems) {
     const updated = {};
 
     TOPICS.forEach((topic) => {
-        const inTopic = allProblems.filter((p) => p.topic === topic.key);
-        const solvedCount = inTopic.filter((p) => solvedSet.has(String(p.id))).length;
-        updated[topic.key] = inTopic.length
-            ? clampPercent((solvedCount / inTopic.length) * 100)
-            : 0;
+        updated[topic.key] = computeTopicProgress(
+            topic.key,
+            completedLessonIds,
+            solvedIds,
+            allProblems
+        );
     });
 
     return updated;
@@ -43,21 +58,54 @@ function computeProgressFromSolved(solvedIds, allProblems) {
 
 async function resolveProgress(uid) {
     try {
-        const [solvedIds, allProblems, stored] = await Promise.all([
+        const [completedLessonIds, solvedIds, allProblems] = await Promise.all([
+            getCompletedLessonIds(uid),
             getSolvedIds(uid),
-            loadProblems(),
-            fetchUserProgress(uid)
+            loadProblems()
         ]);
 
-        if (solvedIds.size > 0) {
-            return computeProgressFromSolved(solvedIds, allProblems);
+        if (completedLessonIds.size > 0 || solvedIds.size > 0) {
+            return computeFullProgress(completedLessonIds, solvedIds, allProblems);
         }
 
-        return stored;
+        return fetchUserProgress(uid);
     } catch (err) {
         console.error("Progress resolve error:", err);
         return fetchUserProgress(uid);
     }
+}
+
+async function persistProgress(uid, progress) {
+    const user = auth.currentUser;
+    if (!user || user.uid !== uid) return false;
+
+    try {
+        await ensureUserDocument(uid, user);
+        await setDoc(doc(db, "users", uid), { progress }, { merge: true });
+        return true;
+    } catch (err) {
+        if (err?.code === "permission-denied") {
+            console.warn("Không lưu được progress lên Firestore — deploy firestore.rules.");
+            return true;
+        }
+        console.error("Progress persist error:", err);
+        return false;
+    }
+}
+
+export async function refreshUserProgress(uid) {
+    if (!uid) return false;
+
+    const [completedLessonIds, solvedIds, allProblems] = await Promise.all([
+        getCompletedLessonIds(uid),
+        getSolvedIds(uid),
+        loadProblems()
+    ]);
+
+    const updated = computeFullProgress(completedLessonIds, solvedIds, allProblems);
+    await persistProgress(uid, updated);
+    renderProgress(updated);
+    return true;
 }
 
 async function fetchUserProgress(uid) {
@@ -174,23 +222,10 @@ export async function updateProgressFromSolved(solvedIds, allProblems) {
     const user = auth.currentUser;
     if (!user) return false;
 
-    const updated = computeProgressFromSolved(solvedIds, allProblems);
+    const completedLessonIds = await getCompletedLessonIds(user.uid);
+    const updated = computeFullProgress(completedLessonIds, solvedIds, allProblems);
 
-    try {
-        await ensureUserDocument(user.uid, user);
-        await setDoc(doc(db, "users", user.uid), {
-            progress: updated
-        }, { merge: true });
-
-        renderProgress(updated);
-        return true;
-    } catch (err) {
-        if (err?.code === "permission-denied") {
-            console.warn("Không lưu được progress lên Firestore — deploy firestore.rules.");
-            renderProgress(updated);
-            return true;
-        }
-        console.error("Progress sync error:", err);
-        return false;
-    }
+    await persistProgress(user.uid, updated);
+    renderProgress(updated);
+    return true;
 }

@@ -5,6 +5,7 @@ import {
     isLessonCompleted,
     markLessonCompleted
 } from "./lessons-service.js";
+import { refreshUserProgress } from "./progress.js";
 
 const params = new URLSearchParams(window.location.search);
 const lessonId = params.get("id");
@@ -102,6 +103,7 @@ async function handleComplete() {
         await markLessonCompleted(currentUser.uid, currentLesson.id);
         completed = true;
         renderActions();
+        await refreshUserProgress(currentUser.uid);
     } catch (err) {
         console.error("Complete lesson error:", err);
         btn.disabled = false;
