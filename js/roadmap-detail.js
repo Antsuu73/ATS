@@ -1,6 +1,7 @@
 import { auth } from "./firebase-config.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
 import { getSolvedIds, loadProblems } from "./problems-service.js";
+import { getCompletedLessonIds } from "./lessons-service.js";
 import {
     getRoadmapById,
     getPracticeSteps,
@@ -15,6 +16,7 @@ const contentEl = document.getElementById("roadmapContent");
 const notFoundEl = document.getElementById("roadmapNotFound");
 
 let solvedIds = new Set();
+let completedLessonIds = new Set();
 let problemsMap = new Map();
 let currentRoadmap = null;
 
@@ -42,6 +44,20 @@ function renderStep(step, index, total) {
             <div class="roadmap-step-actions">
                 <a href="problem.html?id=${step.problemId}" class="btn-step">
                     Làm bài: ${getProblemTitle(step.problemId)}
+                </a>
+                ${status}
+            </div>
+        `;
+    } else if (step.lessonId) {
+        const lessonDone = completedLessonIds.has(step.lessonId);
+        const status = lessonDone
+            ? `<span class="step-status">✓ Đã học</span>`
+            : `<span class="step-status" style="color:var(--muted)">Chưa học</span>`;
+
+        actions = `
+            <div class="roadmap-step-actions">
+                <a href="lesson.html?id=${step.lessonId}" class="btn-step">
+                    Đọc bài học
                 </a>
                 ${status}
             </div>
@@ -137,7 +153,13 @@ async function init() {
 }
 
 onAuthStateChanged(auth, async (user) => {
-    solvedIds = user ? await getSolvedIds(user.uid) : new Set();
+    if (user) {
+        solvedIds = await getSolvedIds(user.uid);
+        completedLessonIds = await getCompletedLessonIds(user.uid);
+    } else {
+        solvedIds = new Set();
+        completedLessonIds = new Set();
+    }
     if (currentRoadmap) renderRoadmap(currentRoadmap);
 });
 

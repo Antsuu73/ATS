@@ -11,6 +11,7 @@ export const ROADMAPS = [
             {
                 type: "learn",
                 title: "Breadth-First Search (BFS)",
+                lessonId: "bfs",
                 content: "BFS duyệt đồ thị theo tầng từ một đỉnh nguồn. Dùng hàng đợi (queue) để luôn mở rộng các đỉnh gần nguồn trước. Phù hợp tìm đường đi ngắn nhất trên đồ thị không trọng số."
             },
             {
@@ -22,6 +23,7 @@ export const ROADMAPS = [
             {
                 type: "learn",
                 title: "Depth-First Search (DFS)",
+                lessonId: "dfs",
                 content: "DFS đi sâu nhất có thể trước khi quay lui. Dùng đệ quy hoặc stack. Thường dùng để đếm thành phần liên thông, phát hiện chu trình, hoặc topo sort."
             },
             {
@@ -33,6 +35,7 @@ export const ROADMAPS = [
             {
                 type: "learn",
                 title: "Dijkstra",
+                lessonId: "dijkstra",
                 content: "Thuật toán tìm đường đi ngắn nhất trên đồ thị có trọng số không âm. Dùng priority queue để luôn chọn đỉnh có khoảng cách nhỏ nhất tiếp theo."
             },
             {
@@ -44,6 +47,7 @@ export const ROADMAPS = [
             {
                 type: "learn",
                 title: "Topological Sort",
+                lessonId: "topo-sort",
                 content: "Sắp xếp các đỉnh của DAG sao cho mọi cạnh u→v đều có u đứng trước v. Có thể làm bằng DFS hoặc Kahn (BFS in-degree)."
             },
             {
@@ -66,11 +70,13 @@ export const ROADMAPS = [
             {
                 type: "learn",
                 title: "Tư duy Dynamic Programming",
+                lessonId: "dp-intro",
                 content: "DP chia bài toán lớn thành các bài con chồng lên nhau. Xác định trạng thái dp[i], công thức chuyển tiếp, và thứ tự tính để tránh tính lại."
             },
             {
                 type: "learn",
                 title: "0/1 Knapsack",
+                lessonId: "knapsack",
                 content: "Mỗi vật chỉ chọn hoặc không chọn. dp[w] = max(dp[w], dp[w-weight[i]] + value[i]). Duyệt trọng lượng từ lớn đến nhỏ khi cập nhật."
             },
             {
@@ -82,6 +88,7 @@ export const ROADMAPS = [
             {
                 type: "learn",
                 title: "Longest Increasing Subsequence",
+                lessonId: "lis",
                 content: "LIS có thể giải O(n²) bằng DP hoặc O(n log n) bằng binary search trên mảng tails. dp[i] = độ dài LIS kết thúc tại i."
             },
             {
@@ -93,6 +100,7 @@ export const ROADMAPS = [
             {
                 type: "learn",
                 title: "Coin Change",
+                lessonId: "coin-change",
                 content: "Bài toán tối ưu số lượng: dp[amount] = min(dp[amount], dp[amount-coin] + 1). Khởi tạo dp[0]=0, các giá trị khác là vô cực."
             },
             {
@@ -115,6 +123,7 @@ export const ROADMAPS = [
             {
                 type: "learn",
                 title: "Duyệt cây nhị phân",
+                lessonId: "tree-traversal",
                 content: "Preorder, inorder, postorder và BFS theo tầng. Độ sâu cây = 1 + max(độ sâu con trái, độ sâu con phải). Base case: nút null có độ sâu 0."
             },
             {
@@ -126,6 +135,7 @@ export const ROADMAPS = [
             {
                 type: "learn",
                 title: "Lowest Common Ancestor (LCA)",
+                lessonId: "lca",
                 content: "LCA của p và q là tổ tiên chung sâu nhất. Có thể giải bằng DFS: nếu nút hiện tại là p hoặc q thì trả về nó; nếu hai nhánh trả về khác null thì nút hiện tại là LCA."
             },
             {
@@ -137,6 +147,7 @@ export const ROADMAPS = [
             {
                 type: "learn",
                 title: "Đường kính cây",
+                lessonId: "tree-diameter",
                 content: "Đường kính = độ dài đường đi dài nhất. Với mỗi nút, đường đi dài nhất đi qua nút đó = 1 + top2 độ sâu của các nhánh con. Cập nhật đường kính toàn cây khi duyệt."
             },
             {
