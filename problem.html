@@ -4,10 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hồ sơ - ATS</title>
+    <title>Problem - ATS</title>
 
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/profile.css">
+    <link rel="stylesheet" href="css/problems.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
@@ -39,15 +39,25 @@
         </div>
     </header>
 
-    <main class="profile-page">
+    <main class="problem-detail-page">
         <div class="container">
-            <div id="profileLoading" class="profile-loading">Đang tải hồ sơ...</div>
-            <div id="profileCard" class="profile-card" style="display:none;"></div>
+
+            <div id="problemLoading" class="problems-loading">Đang tải bài tập...</div>
+
+            <div id="problemNotFound" class="problem-not-found" style="display:none;">
+                <h1>Không tìm thấy bài tập</h1>
+                <p class="login-hint">Bài tập không tồn tại hoặc đã bị xóa.</p>
+                <br>
+                <a href="problems.html" class="problem-back">← Quay lại danh sách</a>
+            </div>
+
+            <div id="problemContent" style="display:none;"></div>
+
         </div>
     </main>
 
     <script type="module" src="js/auth.js"></script>
-    <script type="module" src="js/profile.js"></script>
+    <script type="module" src="js/problem-detail.js"></script>
 </body>
 
 </html>

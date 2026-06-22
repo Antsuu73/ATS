@@ -127,3 +127,31 @@ export async function updateTopicProgress(topicKey, percent) {
         return false;
     }
 }
+
+export async function updateProgressFromSolved(solvedIds, allProblems) {
+    const user = auth.currentUser;
+    if (!user) return false;
+
+    const solvedSet = new Set([...solvedIds].map(String));
+    const updated = {};
+
+    TOPICS.forEach((topic) => {
+        const inTopic = allProblems.filter((p) => p.topic === topic.key);
+        const solvedCount = inTopic.filter((p) => solvedSet.has(String(p.id))).length;
+        updated[topic.key] = inTopic.length
+            ? clampPercent((solvedCount / inTopic.length) * 100)
+            : 0;
+    });
+
+    try {
+        await setDoc(doc(db, "users", user.uid), {
+            progress: updated
+        }, { merge: true });
+
+        renderProgress(updated);
+        return true;
+    } catch (err) {
+        console.error("Progress sync error:", err);
+        return false;
+    }
+}

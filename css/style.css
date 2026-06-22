@@ -171,6 +171,11 @@ a{
     }
 }
 
+.nav-menu a.active{
+    color:var(--blue);
+    font-weight:600;
+}
+
 /* Hero */
 
 .hero{

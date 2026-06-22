@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practice Problems - ATS</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/problems.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <header class="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">ATS</a>
+
+            <nav class="nav-menu">
+                <a href="index.html">Home</a>
+                <a href="#">Roadmaps</a>
+                <a href="problems.html" class="active">Practice</a>
+                <a href="#">Visualizers</a>
+                <a href="#">Dashboard</a>
+            </nav>
+
+            <div class="auth-area">
+                <a href="login.html" class="btn-login" id="loginBtn">Login</a>
+
+                <div id="userBox" class="user-box" style="display:none;">
+                    <div id="userDisplay" class="user-display"></div>
+                    <button id="logoutBtn" class="btn-logout" type="button">Logout</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="problems-page">
+        <div class="container">
+
+            <div class="problems-header">
+                <h1>Practice Problems</h1>
+                <p>Luyện tập theo chủ đề Graph, Dynamic Programming và Tree.</p>
+            </div>
+
+            <div class="problems-toolbar">
+                <input id="problemsSearch" class="problems-search" type="search"
+                    placeholder="Tìm theo tên, tag, ID...">
+
+                <div class="filter-group">
+                    <button class="filter-btn active" data-filter="topic" data-value="all" type="button">Tất cả</button>
+                    <button class="filter-btn" data-filter="topic" data-value="graph" type="button">Graph</button>
+                    <button class="filter-btn" data-filter="topic" data-value="dp" type="button">DP</button>
+                    <button class="filter-btn" data-filter="topic" data-value="tree" type="button">Tree</button>
+                </div>
+            </div>
+
+            <div class="problems-toolbar">
+                <div class="filter-group">
+                    <button class="filter-btn active" data-filter="difficulty" data-value="all" type="button">Mọi độ khó</button>
+                    <button class="filter-btn" data-filter="difficulty" data-value="Easy" type="button">Easy</button>
+                    <button class="filter-btn" data-filter="difficulty" data-value="Medium" type="button">Medium</button>
+                    <button class="filter-btn" data-filter="difficulty" data-value="Hard" type="button">Hard</button>
+                </div>
+            </div>
+
+            <div id="problemsStats" class="problems-stats"></div>
+
+            <div class="problems-table-wrap">
+                <div id="problemsList">
+                    <div class="problems-loading">Đang tải bài tập...</div>
+                </div>
+            </div>
+
+            <div id="problemsPagination" class="problems-pagination"></div>
+
+        </div>
+    </main>
+
+    <script type="module" src="js/auth.js"></script>
+    <script type="module" src="js/problems.js"></script>
+</body>
+
+</html>
