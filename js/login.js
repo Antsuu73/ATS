@@ -1,45 +1,88 @@
-import { auth } from "./firebase-config.js";
+import { auth, db } from "./firebase-config.js";
 
 import {
     GoogleAuthProvider,
     signInWithPopup
-} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
 
-const provider = new GoogleAuthProvider();
+import {
+    doc,
+    setDoc
+} from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
-const loginBtn =
-    document.getElementById("googleLogin");
+/* =========================
+   GOOGLE LOGIN
+========================= */
 
-const status =
-    document.getElementById("status");
+const googleBtn = document.getElementById("googleLogin");
 
-loginBtn.addEventListener("click", async () => {
+googleBtn.addEventListener("click", async () => {
+
+    const provider = new GoogleAuthProvider();
 
     try {
 
-        status.textContent =
-            "Đang đăng nhập...";
+        document.getElementById("status").textContent = "Đang đăng nhập...";
 
-        const result =
-            await signInWithPopup(auth, provider);
+        const result = await signInWithPopup(auth, provider);
 
-        status.textContent =
-            `Xin chào ${result.user.displayName}`;
+        const user = result.user;
+
+        await setDoc(doc(db, "users", user.uid), {
+            name: user.displayName,
+            email: user.email,
+            photo: user.photoURL,
+            loginType: "google"
+        });
+
+        document.getElementById("status").textContent = "Thành công";
 
         setTimeout(() => {
+            window.location.href = "index.html";
+        }, 800);
 
-            window.location.href =
-                "../index.html";
+    } catch (err) {
 
-        }, 1000);
-
-    } catch (error) {
-
-        console.error(error);
-
-        status.textContent =
-            "Đăng nhập thất bại";
+        document.getElementById("status").textContent = err.message;
 
     }
+
+});
+
+/* =========================
+   NORMAL LOGIN (FAKE)
+========================= */
+
+const normalBtn = document.getElementById("normalLogin");
+
+normalBtn.addEventListener("click", () => {
+
+    const name = document.getElementById("name").value;
+    const username = document.getElementById("username").value;
+    const cls = document.getElementById("class").value;
+    const pass = document.getElementById("password").value;
+
+    const status = document.getElementById("status");
+
+    if (!name || !username || !cls || !pass) {
+        status.textContent = "Nhập đủ thông tin";
+        return;
+    }
+
+    // lưu tạm local
+    const userData = {
+        name,
+        username,
+        class: cls,
+        loginType: "normal"
+    };
+
+    localStorage.setItem("user", JSON.stringify(userData));
+
+    status.textContent = "Đăng nhập thành công";
+
+    setTimeout(() => {
+        window.location.href = "index.html";
+    }, 800);
 
 });
