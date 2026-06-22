@@ -59,10 +59,14 @@ export function getSafeAuthErrorMessage(err) {
 export function sanitizeUserProfile(user) {
     if (!user) return null;
 
+    const name = String(user.displayName || "").slice(0, 120);
+    const email = String(user.email || "").slice(0, 254);
+    const photo = sanitizeUrl(user.photoURL, DEFAULT_AVATAR);
+
     return {
-        name: String(user.displayName || "").slice(0, 120) || null,
-        email: String(user.email || "").slice(0, 254) || null,
-        photo: sanitizeUrl(user.photoURL, null),
+        name: name || "User",
+        email: email || "",
+        photo,
         lastLogin: Date.now(),
         loginType: "google"
     };
