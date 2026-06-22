@@ -619,6 +619,14 @@ footer{
     color:var(--blue);
 }
 
+.problem{
+    transition:0.2s;
+}
+
+.problem:hover{
+    transform:translateY(-4px);
+}
+
 /* Animations */
 
 @keyframes float{
