@@ -4,11 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bài học - ATS</title>
+    <title>Visualizer - ATS</title>
 
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/problems.css">
-    <link rel="stylesheet" href="css/lessons.css">
+    <link rel="stylesheet" href="css/visualizers.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
@@ -24,9 +24,9 @@
             <nav class="nav-menu">
                 <a href="index.html">Home</a>
                 <a href="roadmaps.html">Roadmaps</a>
-                <a href="lessons.html" class="active">Lessons</a>
+                <a href="lessons.html">Lessons</a>
                 <a href="problems.html">Practice</a>
-                <a href="visualizers.html">Visualizers</a>
+                <a href="visualizers.html" class="active">Visualizers</a>
             </nav>
 
             <div class="auth-area">
@@ -39,25 +39,25 @@
         </div>
     </header>
 
-    <main class="lesson-detail-page">
+    <main class="visualizer-detail-page">
         <div class="container">
 
-            <div id="lessonLoading" class="problems-loading">Đang tải bài học...</div>
+            <div id="vizLoading" class="problems-loading">Đang tải visualizer...</div>
 
-            <div id="lessonNotFound" class="lesson-not-found" style="display:none;">
-                <h1>Không tìm thấy bài học</h1>
-                <p class="login-hint">Bài học không tồn tại hoặc đã bị xóa.</p>
+            <div id="vizNotFound" class="viz-not-found" style="display:none;">
+                <h1>Không tìm thấy visualizer</h1>
+                <p class="login-hint">Visualizer không tồn tại.</p>
                 <br>
-                <a href="lessons.html" class="lesson-back">← Quay lại danh sách</a>
+                <a href="visualizers.html" class="viz-back">← Quay lại danh sách</a>
             </div>
 
-            <div id="lessonContent" style="display:none;"></div>
+            <div id="vizContent" style="display:none;"></div>
 
         </div>
     </main>
 
     <script type="module" src="js/auth.js"></script>
-    <script type="module" src="js/lesson-detail.js"></script>
+    <script type="module" src="js/visualizer-detail.js"></script>
 </body>
 
 </html>
