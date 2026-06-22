@@ -2,6 +2,7 @@ import { auth } from "./firebase-config.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
 import { loadProblems, getSolvedIds } from "./problems-service.js";
 import { TOPIC_LABELS, DIFFICULTY_ORDER } from "./problems-data.js";
+import { escapeHtml } from "./security.js";
 
 const PER_PAGE = 8;
 
@@ -88,12 +89,12 @@ function renderList() {
         const statusText = isSolved ? "Đã giải" : "Chưa giải";
 
         return `
-            <tr class="problem-row" data-id="${p.id}">
-                <td class="problem-id">${p.id}</td>
-                <td class="problem-title-cell">${p.title}</td>
-                <td><span class="topic-badge">${TOPIC_LABELS[p.topic] || p.topic}</span></td>
-                <td><span class="difficulty-badge ${getDifficultyClass(p.difficulty)}">${p.difficulty}</span></td>
-                <td>${p.rating || "—"}</td>
+            <tr class="problem-row" data-id="${escapeHtml(p.id)}">
+                <td class="problem-id">${escapeHtml(p.id)}</td>
+                <td class="problem-title-cell">${escapeHtml(p.title)}</td>
+                <td><span class="topic-badge">${escapeHtml(TOPIC_LABELS[p.topic] || p.topic)}</span></td>
+                <td><span class="difficulty-badge ${getDifficultyClass(p.difficulty)}">${escapeHtml(p.difficulty)}</span></td>
+                <td>${escapeHtml(p.rating || "—")}</td>
                 <td><span class="status-badge ${statusClass}">${statusText}</span></td>
             </tr>
         `;

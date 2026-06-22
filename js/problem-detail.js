@@ -9,9 +9,14 @@ import {
 } from "./problems-service.js";
 import { TOPIC_LABELS } from "./problems-data.js";
 import { updateProgressFromSolved } from "./progress.js";
+import { escapeHtml } from "./security.js";
 
 const params = new URLSearchParams(window.location.search);
 const problemId = params.get("id");
+
+function isValidId(id) {
+    return id && /^[a-zA-Z0-9_-]{1,64}$/.test(id);
+}
 
 const loadingEl = document.getElementById("problemLoading");
 const contentEl = document.getElementById("problemContent");
@@ -36,8 +41,8 @@ function renderExamples(examples) {
     return examples.map((ex, i) => `
         <div class="example-box">
             <strong>Ví dụ ${i + 1}</strong>
-            <code>Input: ${ex.input}</code><br>
-            <code>Output: ${ex.output}</code>
+            <code>Input: ${escapeHtml(ex.input)}</code><br>
+            <code>Output: ${escapeHtml(ex.output)}</code>
         </div>
     `).join("");
 }
@@ -101,19 +106,19 @@ function renderProblem(problem) {
 
         <div class="problem-detail-card">
             <div class="problem-detail-head">
-                <h1>${problem.id}. ${problem.title}</h1>
-                <span class="topic-badge">${TOPIC_LABELS[problem.topic] || problem.topic}</span>
-                <span class="difficulty-badge ${getDifficultyClass(problem.difficulty)}">${problem.difficulty}</span>
-                ${problem.tag ? `<span class="topic-badge">${problem.tag}</span>` : ""}
+                <h1>${escapeHtml(problem.id)}. ${escapeHtml(problem.title)}</h1>
+                <span class="topic-badge">${escapeHtml(TOPIC_LABELS[problem.topic] || problem.topic)}</span>
+                <span class="difficulty-badge ${getDifficultyClass(problem.difficulty)}">${escapeHtml(problem.difficulty)}</span>
+                ${problem.tag ? `<span class="topic-badge">${escapeHtml(problem.tag)}</span>` : ""}
             </div>
 
             <div class="problem-meta">
-                <span>Rating: <strong>${problem.rating || "—"}</strong></span>
+                <span>Rating: <strong>${escapeHtml(problem.rating || "—")}</strong></span>
             </div>
 
             <div class="problem-section">
                 <h2>Đề bài</h2>
-                <p>${problem.description || "Chưa có mô tả."}</p>
+                <p>${escapeHtml(problem.description || "Chưa có mô tả.")}</p>
             </div>
 
             <div class="problem-section">
@@ -124,7 +129,7 @@ function renderProblem(problem) {
             ${problem.constraints ? `
                 <div class="problem-section">
                     <h2>Ràng buộc</h2>
-                    <p>${problem.constraints}</p>
+                    <p>${escapeHtml(problem.constraints)}</p>
                 </div>
             ` : ""}
 
@@ -139,7 +144,7 @@ function renderProblem(problem) {
 }
 
 async function init() {
-    if (!problemId) {
+    if (!isValidId(problemId)) {
         loadingEl.style.display = "none";
         notFoundEl.style.display = "block";
         return;

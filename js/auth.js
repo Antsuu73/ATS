@@ -3,6 +3,10 @@ import {
     onAuthStateChanged,
     signOut
 } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+import {
+    sanitizeUrl,
+    getDefaultAvatar
+} from "./security.js";
 
 const loginBtn = document.getElementById("loginBtn");
 const userBox = document.getElementById("userBox");
@@ -14,16 +18,28 @@ function renderLoggedInUser(user) {
 
     loginBtn.style.display = "none";
     userBox.style.display = "flex";
+    userDisplay.textContent = "";
 
     const name = user.displayName || user.email || "User";
-    const photo = user.photoURL || "https://www.gravatar.com/avatar?d=mp&s=80";
+    const photo = sanitizeUrl(user.photoURL, getDefaultAvatar(80));
 
-    userDisplay.innerHTML = `
-        <a href="profile.html" class="user-profile-link" title="Xem hồ sơ">
-            <img src="${photo}" alt="${name}" class="user-avatar" referrerpolicy="no-referrer">
-            <span class="user-name">${name}</span>
-        </a>
-    `;
+    const link = document.createElement("a");
+    link.href = "profile.html";
+    link.className = "user-profile-link";
+    link.title = "Xem hồ sơ";
+
+    const img = document.createElement("img");
+    img.src = photo;
+    img.alt = name;
+    img.className = "user-avatar";
+    img.referrerPolicy = "no-referrer";
+
+    const span = document.createElement("span");
+    span.className = "user-name";
+    span.textContent = name;
+
+    link.append(img, span);
+    userDisplay.append(link);
 }
 
 function renderLoggedOut() {
@@ -31,7 +47,7 @@ function renderLoggedOut() {
 
     loginBtn.style.display = "";
     userBox.style.display = "none";
-    userDisplay.innerHTML = "";
+    userDisplay.textContent = "";
 }
 
 onAuthStateChanged(auth, (user) => {

@@ -1,0 +1,93 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Bài tập: chỉ đọc công khai, không ghi từ client
+    match /problems/{problemId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    match /users/{userId} {
+      allow read: if isOwner(userId);
+      allow create: if isOwner(userId) && validUserCreate(request.resource.data);
+      allow update: if isOwner(userId) && validUserUpdate(request.resource.data);
+      allow delete: if false;
+
+      match /solved/{problemId} {
+        allow read: if isOwner(userId);
+        allow create, update: if isOwner(userId) && validSolvedRecord(request.resource.data);
+        allow delete: if false;
+      }
+
+      match /lessons/{lessonId} {
+        allow read: if isOwner(userId);
+        allow create, update: if isOwner(userId) && validLessonRecord(request.resource.data);
+        allow delete: if false;
+      }
+    }
+
+    // Chặn mọi collection khác
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
+
+function isOwner(userId) {
+  return request.auth != null && request.auth.uid == userId;
+}
+
+function validUserCreate(data) {
+  return data.keys().hasOnly(['name', 'email', 'photo', 'lastLogin', 'loginType'])
+    && optionalString(data, 'name', 120)
+    && optionalString(data, 'email', 254)
+    && optionalHttpsUrl(data, 'photo')
+    && data.lastLogin is number
+    && data.loginType == 'google';
+}
+
+function validUserUpdate(data) {
+  return data.keys().hasOnly(['name', 'email', 'photo', 'lastLogin', 'loginType', 'progress'])
+    && optionalString(data, 'name', 120)
+    && optionalString(data, 'email', 254)
+    && optionalHttpsUrl(data, 'photo')
+    && (!('lastLogin' in data) || data.lastLogin is number)
+    && (!('loginType' in data) || data.loginType == 'google')
+    && (!('progress' in data) || validProgress(data.progress));
+}
+
+function validProgress(progress) {
+  return progress is map
+    && progress.keys().hasOnly(['graph', 'dp', 'tree'])
+    && validPercent(progress, 'graph')
+    && validPercent(progress, 'dp')
+    && validPercent(progress, 'tree');
+}
+
+function validPercent(mapData, key) {
+  return !(key in mapData) || (mapData[key] is number && mapData[key] >= 0 && mapData[key] <= 100);
+}
+
+function validSolvedRecord(data) {
+  return data.keys().hasOnly(['solved', 'time'])
+    && data.solved == true
+    && data.time is number;
+}
+
+function validLessonRecord(data) {
+  return data.keys().hasOnly(['completed', 'time'])
+    && data.completed == true
+    && data.time is number;
+}
+
+function optionalString(data, field, maxLen) {
+  return !(field in data) || (data[field] is string && data[field].size() <= maxLen);
+}
+
+function optionalHttpsUrl(data, field) {
+  return !(field in data)
+    || data[field] == null
+    || (data[field] is string && data[field].size() <= 500 && data[field].matches('^https://.*'));
+}

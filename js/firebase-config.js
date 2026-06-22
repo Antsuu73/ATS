@@ -2,6 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/fireba
 import { getAuth } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
+// apiKey trên web client là công khai; bảo mật dựa vào Firestore Rules + Auth.
 const firebaseConfig = {
     apiKey: "AIzaSyBn4ClqOck2torfkDpbIFJLycKBagmiGw8",
     authDomain: "ats-2f1b4.firebaseapp.com",
@@ -16,5 +17,3 @@ const app = initializeApp(firebaseConfig);
 
 export const auth = getAuth(app);
 export const db = getFirestore(app);
-
-console.log("Firebase loaded");
