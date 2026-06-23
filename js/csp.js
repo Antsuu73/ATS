@@ -4,8 +4,8 @@
  */
 export const CSP_POLICY = [
     "default-src 'self'",
-    "script-src 'self' https://www.gstatic.com https://apis.google.com https://www.google.com",
-    "script-src-elem 'self' https://www.gstatic.com https://apis.google.com https://www.google.com",
+    "script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com https://www.google.com",
+    "script-src-elem 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com https://www.google.com",
     "style-src 'self' https://fonts.googleapis.com 'unsafe-inline'",
     "font-src 'self' https://fonts.gstatic.com",
     "img-src 'self' https: data: blob:",
