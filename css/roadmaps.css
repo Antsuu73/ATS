@@ -4,7 +4,7 @@
 .roadmap-detail-page {
     padding: 40px 0 80px;
     min-height: calc(100vh - 72px);
-    background: #f9fafb;
+    background: var(--hover-bg);
 }
 
 .roadmaps-header {
@@ -28,7 +28,7 @@
 }
 
 .roadmap-card {
-    background: #fff;
+    background: var(--card-bg);
     border: 1px solid var(--border);
     border-radius: 16px;
     padding: 24px;
@@ -66,8 +66,8 @@
 }
 
 .roadmap-skill {
-    background: #f3f4f6;
-    color: #374151;
+    background: var(--tag-bg);
+    color: var(--text);
     padding: 4px 10px;
     border-radius: 999px;
     font-size: 12px;
@@ -128,7 +128,7 @@
 }
 
 .roadmap-hero {
-    background: #fff;
+    background: var(--card-bg);
     border: 1px solid var(--border);
     border-radius: 16px;
     padding: 32px;
@@ -160,7 +160,7 @@
 }
 
 .roadmap-steps {
-    background: #fff;
+    background: var(--card-bg);
     border: 1px solid var(--border);
     border-radius: 16px;
     padding: 28px 32px;
@@ -282,7 +282,7 @@
 }
 
 .roadmap-step-card p {
-    color: #4b5563;
+    color: var(--muted);
     line-height: 1.75;
     font-size: 14px;
 }
@@ -312,7 +312,7 @@
 }
 
 .btn-step-outline {
-    background: #fff;
+    background: var(--card-bg);
     color: var(--blue);
     border: 1px solid var(--blue);
 }
@@ -356,3 +356,5 @@
         font-size: 26px;
     }
 }
+
+

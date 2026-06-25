@@ -3,7 +3,9 @@ import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/f
 import {
     loadProblemById,
     isProblemSolved,
-    markProblemSolved
+    markProblemSolved,
+    getFavoriteProblemIds,
+    toggleFavoriteProblem
 } from "./problems-service.js";
 import { TOPIC_LABELS } from "./problems-data.js";
 import { refreshUserProgress } from "./progress.js";
@@ -24,6 +26,7 @@ const notFoundEl = document.getElementById("problemNotFound");
 let currentProblem = null;
 let currentUser = null;
 let solved = false;
+let favorite = false;
 
 function getDifficultyClass(difficulty) {
     const key = String(difficulty).toLowerCase();
@@ -119,7 +122,12 @@ function renderProblem(problem) {
 
         <div class="problem-detail-card">
             <div class="problem-detail-head">
-                <h1>${escapeHtml(problem.id)}. ${escapeHtml(problem.title)}</h1>
+                <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                    <h1>${escapeHtml(problem.id)}. ${escapeHtml(problem.title)}</h1>
+                    <button id="favBtn" class="btn-fav-problem" data-id="${escapeHtml(problem.id)}" style="background:transparent; border:none; cursor:pointer; font-size:24px;" title="${favorite ? "Bỏ yêu thích" : "Yêu thích"}">
+                        ${favorite ? "📌" : "📍"}
+                    </button>
+                </div>
                 <span class="topic-badge">${escapeHtml(TOPIC_LABELS[problem.topic] || problem.topic)}</span>
                 <span class="difficulty-badge ${getDifficultyClass(problem.difficulty)}">${escapeHtml(problem.difficulty)}</span>
                 ${problem.tag ? `<span class="topic-badge">${escapeHtml(problem.tag)}</span>` : ""}
@@ -154,6 +162,15 @@ function renderProblem(problem) {
     notFoundEl.style.display = "none";
     contentEl.style.display = "block";
     renderActions();
+    
+    const favBtn = document.getElementById("favBtn");
+    if (favBtn) {
+        favBtn.addEventListener("click", async () => {
+            const uid = currentUser?.uid || "guest";
+            favorite = await toggleFavoriteProblem(uid, currentProblem.id);
+            renderProblem(currentProblem); // re-render to update icon
+        });
+    }
 }
 
 async function init() {
@@ -179,9 +196,17 @@ onAuthStateChanged(auth, async (user) => {
 
     if (user && currentProblem) {
         solved = await isProblemSolved(user.uid, currentProblem.id);
+        const favs = await getFavoriteProblemIds(user.uid);
+        favorite = favs.has(String(currentProblem.id));
+        renderProblem(currentProblem);
         renderActions();
     } else {
         solved = false;
+        if (currentProblem) {
+            const favs = await getFavoriteProblemIds("guest");
+            favorite = favs.has(String(currentProblem.id));
+            renderProblem(currentProblem);
+        }
         renderActions();
     }
 });

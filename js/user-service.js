@@ -1,6 +1,7 @@
 import { db } from "./firebase-config.js";
 import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 import { sanitizeUserProfile } from "./security.js";
+import { addLocalActivityDate, getLocalActivityDates, isPermissionError } from "./progress-storage.js";
 
 const DEFAULT_PROGRESS = { graph: 0, dp: 0, tree: 0 };
 
@@ -44,4 +45,51 @@ export function getFirestoreErrorMessage(err) {
     };
 
     return messages[code] || "Không thể lưu dữ liệu. Vui lòng thử lại.";
+}
+
+export async function recordActivity(uid) {
+    if (!uid) return;
+    // Lấy ngày hiện tại theo giờ địa phương, không bị lệch múi giờ (YYYY-MM-DD)
+    const date = new Date();
+    const dateStr = date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, '0') + "-" + String(date.getDate()).padStart(2, '0');
+    
+    addLocalActivityDate(uid, dateStr);
+
+    if (uid === "guest") return;
+
+    try {
+        const ref = doc(db, "users", uid);
+        const snap = await getDoc(ref);
+        if (snap.exists()) {
+            const data = snap.data();
+            const activityDates = data.activityDates || [];
+            if (!activityDates.includes(dateStr)) {
+                activityDates.push(dateStr);
+                await setDoc(ref, { activityDates }, { merge: true });
+            }
+        }
+    } catch (err) {
+        if (!isPermissionError(err)) {
+            console.error("Record activity error:", err);
+        }
+    }
+}
+
+export async function getActivityDates(uid) {
+    if (!uid) return new Set();
+    const local = getLocalActivityDates(uid);
+    if (uid === "guest") return local;
+
+    try {
+        const ref = doc(db, "users", uid);
+        const snap = await getDoc(ref);
+        if (snap.exists() && snap.data().activityDates) {
+            snap.data().activityDates.forEach(d => local.add(d));
+        }
+    } catch (err) {
+        if (!isPermissionError(err)) {
+            console.error("Get activity error:", err);
+        }
+    }
+    return local;
 }

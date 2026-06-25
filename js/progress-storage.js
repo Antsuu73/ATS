@@ -43,6 +43,48 @@ export function addLocalCompletedLesson(uid, lessonId) {
     writeSet(uid, "lessons", set);
 }
 
+export function getLocalFavoriteLessonIds(uid) {
+    return readSet(uid, "fav_lessons");
+}
+
+export function addLocalFavoriteLesson(uid, lessonId) {
+    const set = readSet(uid, "fav_lessons");
+    set.add(String(lessonId));
+    writeSet(uid, "fav_lessons", set);
+}
+
+export function removeLocalFavoriteLesson(uid, lessonId) {
+    const set = readSet(uid, "fav_lessons");
+    set.delete(String(lessonId));
+    writeSet(uid, "fav_lessons", set);
+}
+
+export function getLocalFavoriteProblemIds(uid) {
+    return readSet(uid, "fav_problems");
+}
+
+export function addLocalFavoriteProblem(uid, problemId) {
+    const set = readSet(uid, "fav_problems");
+    set.add(String(problemId));
+    writeSet(uid, "fav_problems", set);
+}
+
+export function removeLocalFavoriteProblem(uid, problemId) {
+    const set = readSet(uid, "fav_problems");
+    set.delete(String(problemId));
+    writeSet(uid, "fav_problems", set);
+}
+
+export function getLocalActivityDates(uid) {
+    return readSet(uid, "activity");
+}
+
+export function addLocalActivityDate(uid, dateString) {
+    const set = readSet(uid, "activity");
+    set.add(dateString);
+    writeSet(uid, "activity", set);
+}
+
 export function mergeSets(...sets) {
     const merged = new Set();
     sets.forEach((s) => s.forEach((id) => merged.add(String(id))));

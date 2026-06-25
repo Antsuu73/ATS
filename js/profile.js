@@ -45,11 +45,22 @@ function renderProfile(user, firestoreData) {
             </div>
         </div>
 
+        <div id="streakContainer" style="margin: 20px 0;"></div>
+
         <a href="index.html" class="profile-back-btn">← Về trang chủ</a>
     `;
 
     profileCard.style.display = "block";
     profileLoading.style.display = "none";
+    
+    // Khởi tạo streak sau khi render xong
+    if (window.initStreak) {
+        window.initStreak("streakContainer");
+    } else {
+        import("./streak.js").then(module => {
+            module.initStreak("streakContainer");
+        });
+    }
 }
 
 async function initProfile() {

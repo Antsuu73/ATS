@@ -7,10 +7,13 @@ import {
     setDoc
 } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 import { PROBLEMS } from "./problems-data.js";
-import { ensureUserDocument, getFirestoreErrorMessage } from "./user-service.js";
+import { ensureUserDocument, getFirestoreErrorMessage, recordActivity } from "./user-service.js";
 import {
     addLocalSolved,
     getLocalSolvedIds,
+    getLocalFavoriteProblemIds,
+    addLocalFavoriteProblem,
+    removeLocalFavoriteProblem,
     isPermissionError,
     mergeSets
 } from "./progress-storage.js";
@@ -132,4 +135,26 @@ export async function markProblemSolved(uid, problemId) {
         console.error("Mark solved error:", err);
         throw new Error(getFirestoreErrorMessage(err));
     }
+    
+    await recordActivity(uid);
+}
+
+export async function getFavoriteProblemIds(uid) {
+    if (!uid) return new Set();
+    return getLocalFavoriteProblemIds(uid);
+}
+
+export async function toggleFavoriteProblem(uid, problemId) {
+    if (!uid || !problemId) return false;
+    const id = String(problemId);
+    const favs = getLocalFavoriteProblemIds(uid);
+    let isFav = false;
+    
+    if (favs.has(id)) {
+        removeLocalFavoriteProblem(uid, id);
+    } else {
+        addLocalFavoriteProblem(uid, id);
+        isFav = true;
+    }
+    return isFav;
 }

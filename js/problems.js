@@ -1,6 +1,6 @@
 import { auth } from "./firebase-config.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
-import { loadProblems, getSolvedIds } from "./problems-service.js";
+import { loadProblems, getSolvedIds, getFavoriteProblemIds, toggleFavoriteProblem } from "./problems-service.js";
 import { TOPIC_LABELS, DIFFICULTY_ORDER } from "./problems-data.js";
 import { escapeHtml } from "./security.js";
 
@@ -9,6 +9,7 @@ const PER_PAGE = 8;
 let allProblems = [];
 let filtered = [];
 let solvedIds = new Set();
+let favoriteIds = new Set();
 let page = 1;
 
 let filters = {
@@ -85,17 +86,23 @@ function renderList() {
 
     const rows = items.map((p) => {
         const isSolved = solvedIds.has(String(p.id));
+        const isFav = favoriteIds.has(String(p.id));
         const statusClass = isSolved ? "status-solved" : "status-unsolved";
-        const statusText = isSolved ? "Đã giải" : "Chưa giải";
+        const statusText = isSolved ? "✅ Đã giải" : "Chưa giải";
 
         return `
-            <tr class="problem-row" data-id="${escapeHtml(p.id)}">
+            <tr class="problem-row" data-id="${escapeHtml(p.id)}" style="cursor:pointer;">
                 <td class="problem-id">${escapeHtml(p.id)}</td>
-                <td class="problem-title-cell">${escapeHtml(p.title)}</td>
+                <td class="problem-title-cell">
+                    ${escapeHtml(p.title)}
+                    <button class="btn-fav-problem" data-id="${escapeHtml(p.id)}" style="background:transparent; border:none; cursor:pointer; font-size:16px; margin-left:8px;" title="${isFav ? "Bỏ yêu thích" : "Yêu thích"}">
+                        ${isFav ? "📌" : "📍"}
+                    </button>
+                </td>
                 <td><span class="topic-badge">${escapeHtml(TOPIC_LABELS[p.topic] || p.topic)}</span></td>
                 <td><span class="difficulty-badge ${getDifficultyClass(p.difficulty)}">${escapeHtml(p.difficulty)}</span></td>
                 <td>${escapeHtml(p.rating || "—")}</td>
-                <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                <td><span class="status-badge ${statusClass}" style="${isSolved ? 'color:var(--green); font-weight:600;' : ''}">${statusText}</span></td>
             </tr>
         `;
     }).join("");
@@ -117,8 +124,28 @@ function renderList() {
     `;
 
     listEl.querySelectorAll(".problem-row").forEach((row) => {
-        row.addEventListener("click", () => {
+        row.addEventListener("click", (e) => {
+            if (e.target.closest('.btn-fav-problem')) return;
             window.location.href = `problem.html?id=${row.dataset.id}`;
+        });
+    });
+
+    listEl.querySelectorAll(".btn-fav-problem").forEach((btn) => {
+        btn.addEventListener("click", async (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const uid = auth.currentUser?.uid || "guest";
+            const id = btn.dataset.id;
+            
+            const isFav = await toggleFavoriteProblem(uid, id);
+            
+            if (isFav) {
+                favoriteIds.add(String(id));
+            } else {
+                favoriteIds.delete(String(id));
+            }
+            render();
         });
     });
 }
@@ -217,7 +244,9 @@ filterBtns.forEach((btn) => {
 });
 
 onAuthStateChanged(auth, async (user) => {
-    solvedIds = user ? await getSolvedIds(user.uid) : new Set();
+    const uid = user ? user.uid : "guest";
+    solvedIds = await getSolvedIds(uid);
+    favoriteIds = await getFavoriteProblemIds(uid);
     render();
 });
 

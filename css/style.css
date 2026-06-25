@@ -13,6 +13,29 @@
     --muted:#6b7280;
 
     --bg:#ffffff;
+    --card-bg:#ffffff;
+    --hover-bg:#f3f4f6;
+    --tag-bg:#f3f4f6;
+}
+
+body.dark-theme {
+    --blue:#60a5fa;
+    --blue-dark:#3b82f6;
+
+    --green:#4ade80;
+    --green-bg:rgba(74, 222, 128, 0.15);
+
+    --red:#f87171;
+    --red-bg:rgba(248, 113, 113, 0.15);
+
+    --border:#334155;
+    --text:#e2e8f0;
+    --muted:#94a3b8;
+
+    --bg:#0f172a;
+    --card-bg:#1e293b;
+    --hover-bg:#334155;
+    --tag-bg:#334155;
 }
 
 *{
@@ -50,7 +73,7 @@ a{
     top:0;
     z-index:1000;
 
-    background:#fff;
+    background:var(--bg);
 
     border-bottom:1px solid var(--border);
 }
@@ -81,7 +104,7 @@ a{
 }
 
 .nav-menu a{
-    color:#374151;
+    color: var(--text);
     font-weight:500;
     transition:.2s;
 }
@@ -130,7 +153,7 @@ a{
 }
 
 .user-profile-link:hover{
-    background:#f3f4f6;
+    background:var(--hover-bg);
 }
 
 .user-avatar{
@@ -167,7 +190,7 @@ a{
 .btn-logout:hover{
     border-color:#d1d5db;
     color:var(--text);
-    background:#f9fafb;
+    background:var(--hover-bg);
 }
 
 @media(max-width:768px){
@@ -255,7 +278,8 @@ a{
 
 .btn-secondary{
     border:1px solid var(--border);
-    background:#fff;
+    background:var(--card-bg);
+    color:var(--text);
 }
 
 .btn-secondary:hover{
@@ -271,7 +295,7 @@ a{
 
     padding:28px;
 
-    background:#fff;
+    background:var(--card-bg);
 
     box-shadow:0 8px 30px rgba(0,0,0,.04);
 }
@@ -455,7 +479,7 @@ a{
 
     transition:.25s;
 
-    background:#fff;
+    background:var(--card-bg);
 }
 
 .card:hover{
@@ -515,7 +539,7 @@ a{
 
 .tags span{
 
-    background:#f3f4f6;
+    background:var(--tag-bg);
 
     padding:10px 16px;
 
@@ -579,7 +603,7 @@ a{
 
     border-radius:8px;
 
-    background:#f3f4f6;
+    background:var(--tag-bg);
 }
 
 .binary-search .active{
@@ -752,7 +776,7 @@ footer{
 
         padding:16px 0;
 
-        background:#fff;
+        background:var(--bg);
         border-left:1px solid var(--border);
         box-shadow:-8px 0 30px rgba(0,0,0,.08);
 
@@ -771,7 +795,7 @@ footer{
     }
 
     .nav-menu a.active{
-        background:#eff6ff;
+        background:var(--hover-bg);
         color:var(--blue);
     }
 
@@ -803,3 +827,4 @@ footer{
         flex-direction:column;
     }
 }
+

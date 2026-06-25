@@ -129,7 +129,8 @@ export const PROBLEMS = [
             { input: "root=[1,2,3,4,5]", output: "3" }
         ],
         constraints: "Số nút ≤ 10^4"
-    }
+    },
+
 ];
 
 export const TOPIC_LABELS = {

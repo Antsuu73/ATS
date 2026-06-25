@@ -4,7 +4,7 @@
 .lesson-detail-page {
     padding: 40px 0 80px;
     min-height: calc(100vh - 72px);
-    background: #f9fafb;
+    background: var(--hover-bg);
 }
 
 .lessons-header {
@@ -37,7 +37,7 @@
     border-radius: 10px;
     font-size: 15px;
     font-family: inherit;
-    background: #fff;
+    background: var(--card-bg);
 }
 
 .lessons-search:focus {
@@ -53,7 +53,7 @@
 }
 
 .lesson-card {
-    background: #fff;
+    background: var(--card-bg);
     border: 1px solid var(--border);
     border-radius: 16px;
     padding: 22px;
@@ -151,7 +151,7 @@
 }
 
 .lesson-article {
-    background: #fff;
+    background: var(--card-bg);
     border: 1px solid var(--border);
     border-radius: 16px;
     padding: 36px 40px;
@@ -201,7 +201,7 @@
 
 .lesson-section p,
 .lesson-section li {
-    color: #374151;
+    color: var(--text);
     line-height: 1.85;
     font-size: 15px;
     white-space: pre-line;
@@ -249,7 +249,7 @@
 }
 
 .btn-lesson-outline {
-    background: #fff;
+    background: var(--card-bg);
     color: var(--blue);
     border: 1px solid var(--blue);
 }
@@ -280,7 +280,7 @@
 }
 
 .lesson-nav-card {
-    background: #fff;
+    background: var(--card-bg);
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 18px 20px;
@@ -327,3 +327,5 @@
         font-size: 26px;
     }
 }
+
+

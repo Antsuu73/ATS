@@ -1,7 +1,7 @@
 .profile-page {
     padding: 60px 0 100px;
     min-height: calc(100vh - 72px);
-    background: #f9fafb;
+    background: var(--hover-bg);
 }
 
 .profile-loading {
@@ -14,7 +14,7 @@
 .profile-card {
     max-width: 480px;
     margin: 0 auto;
-    background: #fff;
+    background: var(--card-bg);
     border: 1px solid var(--border);
     border-radius: 20px;
     padding: 48px 40px;
@@ -57,7 +57,7 @@
     flex-direction: column;
     gap: 4px;
     padding: 14px 16px;
-    background: #f9fafb;
+    background: var(--hover-bg);
     border-radius: 10px;
 }
 
@@ -99,3 +99,5 @@
         padding: 36px 24px;
     }
 }
+
+

@@ -131,7 +131,7 @@ input:focus{
     border-radius:10px;
 
     background:white;
-    color:#0f172a;
+    color: var(--text);
 
     font-weight:600;
 
@@ -173,3 +173,4 @@ input:focus{
 .back-link:hover{
     color:var(--primary);
 }
+

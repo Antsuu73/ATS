@@ -4,7 +4,7 @@
 .visualizer-detail-page {
     padding: 40px 0 80px;
     min-height: calc(100vh - 72px);
-    background: #f9fafb;
+    background: var(--hover-bg);
 }
 
 .visualizers-header {
@@ -28,7 +28,7 @@
 }
 
 .viz-card {
-    background: #fff;
+    background: var(--card-bg);
     border: 1px solid var(--border);
     border-radius: 16px;
     padding: 22px;
@@ -47,7 +47,7 @@
 
 .viz-card-preview {
     height: 100px;
-    background: #f8fafc;
+    background: var(--hover-bg);
     border-radius: 10px;
     margin-bottom: 16px;
     display: flex;
@@ -89,7 +89,7 @@
 }
 
 .viz-panel {
-    background: #fff;
+    background: var(--card-bg);
     border: 1px solid var(--border);
     border-radius: 16px;
     padding: 28px 32px;
@@ -113,7 +113,7 @@
 
 .viz-stage {
     min-height: 280px;
-    background: #f8fafc;
+    background: var(--hover-bg);
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 24px;
@@ -160,7 +160,7 @@
 }
 
 .viz-btn-outline {
-    background: #fff;
+    background: var(--card-bg);
     color: var(--blue);
     border: 1px solid var(--blue);
 }
@@ -462,7 +462,7 @@
 }
 
 .viz-dp-table th{
-    background:#f9fafb;
+    background: var(--hover-bg);
     font-weight:600;
 }
 
@@ -492,7 +492,7 @@
     padding:10px 12px;
     min-width:52px;
     text-align:center;
-    background:#fff;
+    background: var(--card-bg);
 }
 
 .viz-dp-cell.viz-dp-active{
@@ -625,3 +625,5 @@
         width: 100%;
     }
 }
+
+

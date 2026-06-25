@@ -6,10 +6,13 @@ import {
     getDocs,
     setDoc
 } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
-import { ensureUserDocument, getFirestoreErrorMessage } from "./user-service.js";
+import { ensureUserDocument, getFirestoreErrorMessage, recordActivity } from "./user-service.js";
 import {
     addLocalCompletedLesson,
     getLocalCompletedLessonIds,
+    getLocalFavoriteLessonIds,
+    addLocalFavoriteLesson,
+    removeLocalFavoriteLesson,
     isPermissionError,
     mergeSets
 } from "./progress-storage.js";
@@ -78,9 +81,31 @@ export async function markLessonCompleted(uid, lessonId) {
                 "Deploy firestore.rules: firebase deploy --only firestore:rules --project ats-2f1b4"
             );
             addLocalCompletedLesson(uid, id);
-            return;
+        } else {
+            console.error("Mark lesson error:", err);
+            throw new Error(getFirestoreErrorMessage(err));
         }
-        console.error("Mark lesson error:", err);
-        throw new Error(getFirestoreErrorMessage(err));
     }
+
+    await recordActivity(uid);
+}
+
+export async function getFavoriteLessonIds(uid) {
+    if (!uid) return new Set();
+    return getLocalFavoriteLessonIds(uid);
+}
+
+export async function toggleFavoriteLesson(uid, lessonId) {
+    if (!uid || !lessonId) return false;
+    const id = String(lessonId);
+    const favs = getLocalFavoriteLessonIds(uid);
+    let isFav = false;
+    
+    if (favs.has(id)) {
+        removeLocalFavoriteLesson(uid, id);
+    } else {
+        addLocalFavoriteLesson(uid, id);
+        isFav = true;
+    }
+    return isFav;
 }

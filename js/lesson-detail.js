@@ -3,7 +3,9 @@ import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/f
 import { getLessonById, TOPIC_LABELS, LESSONS } from "./lessons-data.js";
 import {
     isLessonCompleted,
-    markLessonCompleted
+    markLessonCompleted,
+    getFavoriteLessonIds,
+    toggleFavoriteLesson
 } from "./lessons-service.js";
 import { refreshUserProgress } from "./progress.js";
 import { getVisualizerByLessonId } from "./visualizers-data.js";
@@ -18,6 +20,7 @@ const notFoundEl = document.getElementById("lessonNotFound");
 let currentLesson = null;
 let currentUser = null;
 let completed = false;
+let favorite = false;
 
 function getDifficultyClass(d) {
     const key = String(d).toLowerCase();
@@ -134,7 +137,12 @@ function renderLesson(lesson) {
 
         <article class="lesson-article">
             <header class="lesson-article-head">
-                <span class="topic-badge">${TOPIC_LABELS[lesson.topic]}</span>
+                <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                    <span class="topic-badge">${TOPIC_LABELS[lesson.topic]}</span>
+                    <button id="favBtn" class="btn-fav-lesson" data-id="${lesson.id}" style="background:transparent; border:none; cursor:pointer; font-size:24px;" title="${favorite ? "Bỏ yêu thích" : "Yêu thích"}">
+                        ${favorite ? "📌" : "📍"}
+                    </button>
+                </div>
                 <h1>${lesson.title}</h1>
                 <p class="lesson-article-summary">${lesson.summary}</p>
                 <div class="lesson-article-meta">
@@ -164,6 +172,15 @@ function renderLesson(lesson) {
     notFoundEl.style.display = "none";
     contentEl.style.display = "block";
     renderActions();
+    
+    const favBtn = document.getElementById("favBtn");
+    if (favBtn) {
+        favBtn.addEventListener("click", async () => {
+            const uid = currentUser?.uid || "guest";
+            favorite = await toggleFavoriteLesson(uid, currentLesson.id);
+            renderLesson(currentLesson); // re-render to update icon
+        });
+    }
 }
 
 async function init() {
@@ -189,9 +206,17 @@ onAuthStateChanged(auth, async (user) => {
 
     if (user && currentLesson) {
         completed = await isLessonCompleted(user.uid, currentLesson.id);
+        const favs = await getFavoriteLessonIds(user.uid);
+        favorite = favs.has(String(currentLesson.id));
+        renderLesson(currentLesson); // re-render header as well
         renderActions();
     } else {
         completed = false;
+        if (currentLesson) {
+            const favs = await getFavoriteLessonIds("guest");
+            favorite = favs.has(String(currentLesson.id));
+            renderLesson(currentLesson);
+        }
         renderActions();
     }
 });

@@ -1,10 +1,11 @@
 import { auth } from "./firebase-config.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
-import { getCompletedLessonIds } from "./lessons-service.js";
+import { getCompletedLessonIds, getFavoriteLessonIds, toggleFavoriteLesson } from "./lessons-service.js";
 import { LESSONS, TOPIC_LABELS } from "./lessons-data.js";
 import { getVisualizerByLessonId } from "./visualizers-data.js";
 
 let completedIds = new Set();
+let favoriteIds = new Set();
 let filters = { topic: "all", search: "" };
 
 const gridEl = document.getElementById("lessonsGrid");
@@ -33,14 +34,20 @@ function getFilteredLessons() {
 
 function renderCard(lesson) {
     const done = completedIds.has(lesson.id);
+    const fav = favoriteIds.has(String(lesson.id));
     const viz = getVisualizerByLessonId(lesson.id);
 
     return `
         <a href="lesson.html?id=${lesson.id}" class="lesson-card${done ? " done" : ""}">
-            <div class="lesson-card-top">
-                <span class="topic-badge">${TOPIC_LABELS[lesson.topic]}</span>
-                ${viz ? `<span class="lesson-viz-badge">Visualizer</span>` : ""}
-                ${done ? `<span class="lesson-done-badge">✓ Đã học</span>` : ""}
+            <div class="lesson-card-top" style="display:flex; justify-content:space-between; align-items:flex-start;">
+                <div>
+                    <span class="topic-badge">${TOPIC_LABELS[lesson.topic]}</span>
+                    ${viz ? `<span class="lesson-viz-badge">Visualizer</span>` : ""}
+                    ${done ? `<span class="lesson-done-badge" style="color:var(--green); font-weight:600; margin-left:8px;">✅ Đã học</span>` : ""}
+                </div>
+                <button class="btn-fav-lesson" data-id="${lesson.id}" style="background:transparent; border:none; cursor:pointer; font-size:18px;" title="${fav ? "Bỏ yêu thích" : "Yêu thích"}">
+                    ${fav ? "📌" : "📍"}
+                </button>
             </div>
             <h3>${lesson.title}</h3>
             <p>${lesson.summary}</p>
@@ -64,6 +71,30 @@ function render() {
 
     gridEl.innerHTML = items.map(renderCard).join("");
     window.refreshATSAnimations?.(gridEl);
+    
+    // Attach favorite events
+    gridEl.querySelectorAll('.btn-fav-lesson').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const uid = auth.currentUser?.uid;
+            // Allow favorite even without login by using local storage (which doesn't strictly need uid if we adapt it or we pass a dummy uid)
+            // Wait, progress-storage methods need a uid, but we can use "local" or handle it.
+            // Let's assume uid is handled in service or we pass "guest" if not logged in.
+            const userId = uid || "guest"; 
+            
+            const id = btn.dataset.id;
+            const isFav = await toggleFavoriteLesson(userId, id);
+            
+            if (isFav) {
+                favoriteIds.add(String(id));
+            } else {
+                favoriteIds.delete(String(id));
+            }
+            render(); // re-render to update icon
+        });
+    });
 }
 
 function setActiveFilters() {
@@ -94,7 +125,9 @@ filterBtns.forEach((btn) => {
 });
 
 onAuthStateChanged(auth, async (user) => {
-    completedIds = user ? await getCompletedLessonIds(user.uid) : new Set();
+    const uid = user ? user.uid : "guest";
+    completedIds = await getCompletedLessonIds(uid);
+    favoriteIds = await getFavoriteLessonIds(uid);
     render();
 });
 

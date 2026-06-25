@@ -40,6 +40,9 @@
             </nav>
 
             <div class="auth-area">
+                <button id="themeToggleBtn" class="btn-secondary" style="margin-right: 12px; padding: 10px; border-radius: 50%; font-size: 16px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer;" aria-label="Toggle theme">
+                    ☀️
+                </button>
                 <a href="login.html" class="btn-login" id="loginBtn">Login</a>
 
                 <div id="userBox" class="user-box" style="display:none;">
@@ -101,6 +104,8 @@
                     </span>
 
                 </div>
+
+                <div id="streakContainer" style="margin-top: 20px;"></div>
 
                 <div class="progress-bar">
 
@@ -622,9 +627,14 @@
 
     </footer>
 
+    <script src="js/theme.js" type="module"></script>
     <script src="js/animations.js" defer></script>
     <script src="js/mobile-nav.js" defer></script>
     <script src="js/script.js"></script>
+    <script type="module">
+        import { initStreak } from "./js/streak.js";
+        initStreak("streakContainer");
+    </script>
     <script type="module" src="js/auth.js"></script>
     <script type="module" src="js/progress.js"></script>
 </body>
