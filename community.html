@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="referrer" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com https://www.google.com; script-src-elem 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com https://www.google.com; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' https: data: blob:; connect-src 'self' https://*.googleapis.com https://*.google.com https://*.gstatic.com https://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com wss://*.firebaseio.com; frame-src 'self' https://accounts.google.com https://*.firebaseapp.com https://www.google.com https://apis.google.com; base-uri 'self'; form-action 'self';">
+    <title>Community - ATS</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/community.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- Navbar -->
+
+    <header class="navbar">
+
+        <div class="container nav-container">
+
+            <a href="index.html" class="logo">
+                ATS
+            </a>
+
+            <nav class="nav-menu">
+
+                <a href="index.html">Home</a>
+                <a href="roadmaps.html">Roadmaps</a>
+                <a href="lessons.html">Lessons</a>
+                <a href="problems.html">Practice</a>
+                <a href="visualizers.html">Visualizers</a>
+                <a href="tasks.html">Challenges</a>
+                <a href="community.html" class="active">Community</a>
+
+            </nav>
+
+            <div class="auth-area">
+                <button id="themeToggleBtn" class="btn-secondary" style="margin-right: 12px; padding: 10px; border-radius: 50%; font-size: 16px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer;" aria-label="Toggle theme">
+                    ☀️
+                </button>
+                <a href="login.html" class="btn-login" id="loginBtn">Login</a>
+
+                <div id="userBox" class="user-box" style="display:none;">
+                    <div id="userDisplay" class="user-display"></div>
+                    <button id="logoutBtn" class="btn-logout" type="button">Logout</button>
+                </div>
+            </div>
+
+
+        </div>
+
+    </header>
+
+    <!-- Main Content -->
+
+    <main class="community-page">
+
+        <div class="container">
+
+            <div class="community-header">
+
+                <div class="community-header-top">
+
+                    <h1>
+                        Community
+                    </h1>
+
+                    <button id="btnCompose" class="btn-primary btn-compose">
+                        ✏️ Đăng bài mới
+                    </button>
+
+                </div>
+
+                <p>
+                    Chia sẻ kiến thức, hỏi đáp và thảo luận thuật toán cùng cộng đồng.
+                </p>
+
+            </div>
+
+            <div class="community-toolbar">
+
+                <input id="communitySearch" class="community-search" type="search"
+                    placeholder="Tìm bài viết, người dùng, chủ đề...">
+
+                <div class="filter-group">
+                    <button class="filter-btn active" data-filter="topic" data-value="all" type="button">Tất cả</button>
+                    <button class="filter-btn" data-filter="topic" data-value="graph" type="button">Đồ thị</button>
+                    <button class="filter-btn" data-filter="topic" data-value="dp" type="button">QHĐ</button>
+                    <button class="filter-btn" data-filter="topic" data-value="tree" type="button">Cây</button>
+                    <button class="filter-btn" data-filter="topic" data-value="recursion" type="button">Đệ quy</button>
+                    <button class="filter-btn" data-filter="topic" data-value="data-structure" type="button">Cấu trúc dữ liệu</button>
+                    <button class="filter-btn" data-filter="topic" data-value="sorting-search" type="button">Sắp xếp và Tìm kiếm</button>
+                    <button class="filter-btn" data-filter="topic" data-value="greedy" type="button">Tham lam</button>
+                    <button class="filter-btn" data-filter="topic" data-value="math" type="button">Toán</button>
+                    <button class="filter-btn" data-filter="topic" data-value="string" type="button">Xâu</button>
+                    <button class="filter-btn" data-filter="topic" data-value="other" type="button">Khác</button>
+                </div>
+
+            </div>
+
+            <!-- List View -->
+
+            <div id="communityList" class="community-list"></div>
+
+            <!-- Detail View -->
+
+            <div id="communityDetail" class="community-detail" style="display:none;"></div>
+
+            <!-- Compose Modal -->
+
+            <div id="composeModal" class="community-modal" style="display:none;">
+
+                <div class="community-modal-backdrop"></div>
+
+                <div class="community-modal-content">
+
+                    <div class="community-modal-header">
+
+                        <h2>Đăng bài mới</h2>
+
+                        <button id="btnCloseCompose" class="btn-close-modal" type="button">✕</button>
+
+                    </div>
+
+                    <form id="composeForm" class="compose-form">
+
+                        <div class="form-group">
+
+                            <label for="composeTitle">Tiêu đề</label>
+
+                            <input id="composeTitle" class="compose-input" type="text"
+                                placeholder="Tiêu đề bài viết..." required maxlength="120">
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label for="composeTopic">Chủ đề</label>
+
+                            <select id="composeTopic" class="compose-input">
+                                <option value="graph">Đồ thị</option>
+                                <option value="dp">Quy hoạch động</option>
+                                <option value="tree">Cây</option>
+                                <option value="recursion">Đệ quy</option>
+                                <option value="data-structure">Cấu trúc dữ liệu</option>
+                                <option value="sorting-search">Sắp xếp và Tìm kiếm</option>
+                                <option value="greedy">Tham lam</option>
+                                <option value="math">Toán</option>
+                                <option value="string">Xâu</option>
+                                <option value="other">Khác</option>
+                            </select>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label for="composeContent">Nội dung</label>
+
+                            <textarea id="composeContent" class="compose-textarea" rows="6"
+                                placeholder="Chia sẻ suy nghĩ, giải pháp, lỗi bạn gặp phải..." required maxlength="5000"></textarea>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label for="composeCode">Code (tuỳ chọn)</label>
+
+                            <textarea id="composeCode" class="compose-textarea code-input" rows="5"
+                                placeholder="// Dán code của bạn vào đây..."></textarea>
+
+                        </div>
+
+                        <div class="compose-actions">
+
+                            <button type="button" id="btnCancelCompose" class="btn-secondary">Hủy</button>
+
+                            <button type="submit" class="btn-primary">Đăng bài</button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <script src="js/theme.js" type="module"></script>
+    <script src="js/animations.js" defer></script>
+    <script src="js/mobile-nav.js" defer></script>
+
+    <script type="module" src="js/auth.js"></script>
+    <script type="module" src="js/community.js"></script>
+</body>
+
+</html>

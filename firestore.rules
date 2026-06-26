@@ -24,9 +24,26 @@ service cloud.firestore {
         allow delete: if false;
       }
     }
+
+    // Community — ai đọc được, thành viên đăng/chỉnh, xóa được bài của mình
+    match /communityPosts/{postId} {
+      allow read: if true;
+      allow create: if isSignedIn();
+      allow update, delete: if isOwner(resource.data.authorId);
+
+      match /comments/{commentId} {
+        allow read: if true;
+        allow create: if isSignedIn();
+        allow update, delete: if isOwner(resource.data.authorId);
+      }
+    }
   }
 }
 
 function isOwner(userId) {
   return request.auth != null && request.auth.uid == userId;
+}
+
+function isSignedIn() {
+  return request.auth != null;
 }

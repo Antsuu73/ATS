@@ -1,6 +1,7 @@
 :root{
     --blue:#2563eb;
     --blue-dark:#1d4ed8;
+    --blue-bg:#dbeafe;
 
     --green:#16a34a;
     --green-bg:#dcfce7;
@@ -39,6 +40,7 @@
 body.dark-theme {
     --blue:#60a5fa;
     --blue-dark:#3b82f6;
+    --blue-bg:rgba(69, 96, 232, 0.15);
 
     --green:#4ade80;
     --green-bg:rgba(74, 222, 128, 0.15);
