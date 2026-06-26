@@ -4,11 +4,69 @@ export const VISUALIZERS = [
     {
         id: "bubble-sort",
         title: "Bubble Sort",
-        topic: "sorting",
+        topic: "sorting-search",
         engine: "bar-sort",
         algo: "bubble",
         description: "So sánh hai phần tử kề nhau và đổi chỗ nếu sai thứ tự. Phần tử lớn nhất \"nổi\" về cuối mỗi vòng.",
         complexity: "O(n²)",
+        relatedLessonId: null
+    },
+    {
+        id: "insertion-sort",
+        title: "Insertion Sort",
+        topic: "sorting-search",
+        engine: "bar-sort",
+        algo: "insertion",
+        description: "Chèn từng phần tử vào đúng vị trí trong phần đã sắp xếp — giống cách sắp xếp bài trên tay.",
+        complexity: "O(n²)",
+        relatedLessonId: null
+    },
+    {
+        id: "selection-sort",
+        title: "Selection Sort",
+        topic: "sorting-search",
+        engine: "bar-sort",
+        algo: "selection",
+        description: "Mỗi vòng chọn phần tử nhỏ nhất trong phần chưa sắp xếp và đặt vào vị trí đúng.",
+        complexity: "O(n²)",
+        relatedLessonId: null
+    },
+    {
+        id: "quick-sort",
+        title: "Quick Sort",
+        topic: "sorting-search",
+        engine: "bar-sort",
+        algo: "quick",
+        description: "Chọn pivot, chia mảng thành phần nhỏ hơn và lớn hơn pivot, rồi sắp xếp đệ quy.",
+        complexity: "O(n log n)",
+        relatedLessonId: null
+    },
+    {
+        id: "merge-sort",
+        title: "Merge Sort",
+        topic: "sorting-search",
+        engine: "bar-sort",
+        algo: "merge",
+        description: "Chia đôi mảng, sắp xếp từng nửa rồi trộn (merge) hai nửa đã sắp xếp.",
+        complexity: "O(n log n)",
+        relatedLessonId: null
+    },
+    {
+        id: "linear-search",
+        title: "Linear Search",
+        topic: "sorting-search",
+        engine: "linear-search",
+        description: "Duyệt tuần tự từng phần tử cho đến khi tìm thấy giá trị cần tìm.",
+        complexity: "O(n)",
+        relatedLessonId: null
+    },
+    {
+        id: "binary-search",
+        title: "Binary Search",
+        topic: "sorting-search",
+        engine: "binary-search",
+        description: "Tìm kiếm nhị phân trên mảng đã sắp xếp — mỗi bước loại bỏ một nửa không gian tìm kiếm.",
+        complexity: "O(log n)",
         relatedLessonId: null
     },
     {
@@ -162,12 +220,16 @@ export const VISUALIZERS = [
 ];
 
 export const TOPIC_LABELS = {
-    sorting: "Sorting",
-    search: "Search",
-    graph: "Graph",
-    dp: "Dynamic Programming",
-    "data-structure": "Data Structure",
-    tree: "Tree"
+    graph: "Đồ thị",
+    dp: "Quy hoạch động",
+    "data-structure": "Cấu trúc dữ liệu",
+    tree: "Cây",
+    "sorting-search": "Sắp xếp và Tìm kiếm",
+    recursion: "Đệ quy",
+    greedy: "Tham lam",
+    math: "Toán",
+    string: "Xâu",
+    other: "Khác"
 };
 
 export function getVisualizerById(id) {

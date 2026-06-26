@@ -8,6 +8,24 @@
     --red:#dc2626;
     --red-bg:#fee2e2;
 
+    --purple:#9333ea;
+    --purple-bg:#f3e8ff;
+
+    --teal:#0d9488;
+    --teal-bg:#ccfbf1;
+
+    --orange:#ea580c;
+    --orange-bg:#ffedd5;
+
+    --indigo:#4f46e5;
+    --indigo-bg:#e0e7ff;
+
+    --pink:#db2777;
+    --pink-bg:#fce7f3;
+
+    --cyan:#0891b2;
+    --cyan-bg:#cffafe;
+
     --border:#e5e7eb;
     --text:#1f2937;
     --muted:#6b7280;
@@ -28,7 +46,24 @@ body.dark-theme {
     --red:#f87171;
     --red-bg:rgba(248, 113, 113, 0.15);
 
-    --border:#334155;
+    --purple:#a855f7;
+    --purple-bg:rgba(168, 85, 247, 0.15);
+
+    --teal:#2dd4bf;
+    --teal-bg:rgba(45, 212, 191, 0.15);
+
+    --orange:#f97316;
+    --orange-bg:rgba(249, 115, 22, 0.15);
+
+    --indigo:#818cf8;
+    --indigo-bg:rgba(129, 140, 248, 0.15);
+
+    --pink:#f472b6;
+    --pink-bg:rgba(244, 114, 182, 0.15);
+
+    --cyan:#22d3ee;
+    --cyan-bg:rgba(34, 211, 238, 0.15);
+
     --text:#e2e8f0;
     --muted:#94a3b8;
 
@@ -36,6 +71,7 @@ body.dark-theme {
     --card-bg:#1e293b;
     --hover-bg:#334155;
     --tag-bg:#334155;
+    --border:#334155;
 }
 
 *{
@@ -461,6 +497,30 @@ a{
     background:var(--red);
 }
 
+.purple-fill{
+    background:var(--purple);
+}
+
+.teal-fill{
+    background:var(--teal);
+}
+
+.orange-fill{
+    background:var(--orange);
+}
+
+.indigo-fill{
+    background:var(--indigo);
+}
+
+.pink-fill{
+    background:var(--pink);
+}
+
+.cyan-fill{
+    background:var(--cyan);
+}
+
 /* Cards */
 
 .cards-grid{
@@ -520,13 +580,43 @@ a{
 }
 
 .blue-bg{
-    background:#dbeafe;
+    background:var(--blue-bg, #dbeafe);
     color:var(--blue);
 }
 
 .red-bg{
     background:var(--red-bg);
     color:var(--red);
+}
+
+.purple-bg{
+    background:var(--purple-bg);
+    color:var(--purple);
+}
+
+.teal-bg{
+    background:var(--teal-bg);
+    color:var(--teal);
+}
+
+.orange-bg{
+    background:var(--orange-bg);
+    color:var(--orange);
+}
+
+.indigo-bg{
+    background:var(--indigo-bg);
+    color:var(--indigo);
+}
+
+.pink-bg{
+    background:var(--pink-bg);
+    color:var(--pink);
+}
+
+.cyan-bg{
+    background:var(--cyan-bg);
+    color:var(--cyan);
 }
 
 /* Tags */

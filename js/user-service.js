@@ -3,7 +3,7 @@ import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.15.0/
 import { sanitizeUserProfile } from "./security.js";
 import { addLocalActivityDate, getLocalActivityDates, isPermissionError } from "./progress-storage.js";
 
-const DEFAULT_PROGRESS = { graph: 0, dp: 0, tree: 0 };
+const DEFAULT_PROGRESS = { graph: 0, dp: 0, tree: 0, recursion: 0, "data-structure": 0, "sorting-search": 0, greedy: 0, math: 0, string: 0 };
 
 /**
  * Đảm bảo document users/{uid} tồn tại trước khi ghi subcollection hoặc progress.

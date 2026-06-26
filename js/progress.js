@@ -11,12 +11,18 @@ import { getCompletedLessonIds } from "./lessons-service.js";
 import { LESSONS } from "./lessons-data.js";
 
 const TOPICS = [
-    { key: "graph", label: "Graph" },
-    { key: "dp", label: "DP" },
-    { key: "tree", label: "Tree" }
+    { key: "graph", label: "Đồ thị" },
+    { key: "dp", label: "Quy hoạch động" },
+    { key: "tree", label: "Cây" },
+    { key: "recursion", label: "Đệ quy" },
+    { key: "data-structure", label: "Cấu trúc dữ liệu" },
+    { key: "sorting-search", label: "Sắp xếp và Tìm kiếm" },
+    { key: "greedy", label: "Tham lam" },
+    { key: "math", label: "Toán" },
+    { key: "string", label: "Xâu" }
 ];
 
-const DEFAULT_PROGRESS = { graph: 0, dp: 0, tree: 0 };
+const DEFAULT_PROGRESS = { graph: 0, dp: 0, tree: 0, recursion: 0, "data-structure": 0, "sorting-search": 0, greedy: 0, math: 0, string: 0 };
 
 function clampPercent(value) {
     return Math.max(0, Math.min(100, Math.round(Number(value) || 0)));
@@ -119,7 +125,13 @@ async function fetchUserProgress(uid) {
         return {
             graph: clampPercent(stored.graph),
             dp: clampPercent(stored.dp),
-            tree: clampPercent(stored.tree)
+            tree: clampPercent(stored.tree),
+            recursion: clampPercent(stored.recursion),
+            "data-structure": clampPercent(stored["data-structure"]),
+            "sorting-search": clampPercent(stored["sorting-search"]),
+            greedy: clampPercent(stored.greedy),
+            math: clampPercent(stored.math),
+            string: clampPercent(stored.string)
         };
     } catch (err) {
         console.error("Progress load error:", err);

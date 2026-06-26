@@ -307,13 +307,168 @@ while (!pq.empty()) {
                 content: "Hàm dfs(u) trả về độ sâu max từ u xuống lá.\nKhi có leftDepth và rightDepth: diameter = max(diameter, leftDepth + rightDepth)."
             }
         ]
+    },
+    {
+        id: "recursion-intro",
+        title: "Tư duy Đệ quy",
+        topic: "recursion",
+        difficulty: "Easy",
+        duration: "15 phút",
+        summary: "Xây dựng bài toán dựa trên bài con nhỏ hơn — base case, recursive case và call stack.",
+        relatedProblemId: "11",
+        roadmapId: "recursion",
+        sections: [
+            {
+                title: "Đệ quy là gì?",
+                content: "Đệ quy giải bài toán bằng cách chia thành bài con cùng dạng nhỏ hơn. Cần base case để dừng và recursive case để tiếp tục."
+            },
+            {
+                title: "Khi nào dùng?",
+                content: "• Đếm, tổ hợp, hoán vị\n• Duyệt cây, đồ thị\n• Chia để trị (divide and conquer)"
+            },
+            {
+                title: "Code mẫu",
+                code: `int fib(int n) {
+    if (n <= 1) return n;
+    return fib(n-1) + fib(n-2);
+}`
+            },
+            {
+                title: "Lưu ý",
+                content: "Nếu có nhiều bài con trùng lặp, thêm memoization để tối ưu từ O(2^n) xuống O(n)."
+            }
+        ]
+    },
+    {
+        id: "stack-queue",
+        title: "Stack và Queue",
+        topic: "data-structure",
+        difficulty: "Easy",
+        duration: "15 phút",
+        summary: "Hai cấu trúc cơ bản: LIFO (Stack) và FIFO (Queue) — dùng trong RPN, undo, scheduler.",
+        relatedProblemId: "12",
+        roadmapId: "data-structure",
+        sections: [
+            {
+                title: "Stack (LIFO)",
+                content: "Last In First Out. push() thêm đỉnh, pop() lấy đỉnh, peek() xem đỉnh. Dùng cho undo, expression evaluation, parentheses checking."
+            },
+            {
+                title: "Queue (FIFO)",
+                content: "First In First Out. enqueue() thêm cuối, dequeue() lấy đầu. Dùng cho BFS, scheduler, buffer."
+            },
+            {
+                title: "Code mẫu",
+                code: `// Stack
+stack<int> st;
+st.push(1); st.pop(); // LIFO
+
+// Queue
+queue<int> q;
+q.push(1); q.pop(); // FIFO`
+            }
+        ]
+    },
+    {
+        id: "binary-search",
+        title: "Binary Search",
+        topic: "sorting-search",
+        difficulty: "Easy",
+        duration: "12 phút",
+        summary: "Tìm kiếm nhị phân trên mảng đã sắp xếp — mỗi bước loại bỏ một nửa.",
+        relatedProblemId: "13",
+        roadmapId: "sorting-search",
+        sections: [
+            {
+                title: "Ý tưởng",
+                content: "So sánh target với phần tử giữa mảng. Nếu bằng → tìm thấy. Nếu nhỏ hơn → tìm bên trái. Nếu lớn hơn → tìm bên phải."
+            },
+            {
+                title: "Code mẫu",
+                code: `int bs(vector<int>& a, int t) {
+    int l = 0, r = a.size()-1;
+    while (l <= r) {
+        int m = l + (r-l)/2;
+        if (a[m] == t) return m;
+        if (a[m] < t) l = m+1; else r = m-1;
+    }
+    return -1;
+}`
+            }
+        ]
+    },
+    {
+        id: "greedy-intro",
+        title: "Tư duy Tham lam",
+        topic: "greedy",
+        difficulty: "Medium",
+        duration: "18 phút",
+        summary: "Mỗi bước chọn phương án tốt nhất tại thời điểm hiện tại — không hối tiếc.",
+        relatedProblemId: "14",
+        roadmapId: "greedy",
+        sections: [
+            {
+                title: "Greedy là gì?",
+                content: "Thuật toán chọn giải pháp tối ưu cục bộ tại mỗi bước với hy vọng dẫn đến kết quả toàn cục tối ưu."
+            },
+            {
+                title: "Khi nào dùng?",
+                content: "Chỉ đúng khi bài toán có tính chất 'tối ưu cục bộ dẫn đến tối ưu toàn cục'. Ví dụ: scheduling, coin change (với đồng xu chuẩn)."
+            }
+        ]
+    },
+    {
+        id: "prime-sieve",
+        title: "Số nguyên tố và modulo",
+        topic: "math",
+        difficulty: "Easy",
+        duration: "20 phút",
+        summary: "Sàng Eratosthenes, kiểm tra primality O(sqrt(n)), và các phép toán modulo.",
+        relatedProblemId: "15",
+        roadmapId: "math",
+        sections: [
+            {
+                title: "Số nguyên tố",
+                content: "Số nguyên tố chỉ chia hết cho 1 và chính nó. Kiểm tra O(sqrt(n)) bằng cách thử chia đến căn bậc 2."
+            },
+            {
+                title: "Sàng Eratosthenes",
+                content: "Đánh dấu các số bội của ước nhỏ hơn trong O(n log log n)."
+            }
+        ]
+    },
+    {
+        id: "lcs",
+        title: "Xâu con chung dài nhất (LCS)",
+        topic: "string",
+        difficulty: "Medium",
+        duration: "20 phút",
+        summary: "Tìm dãy ký tự chung dài nhất giữa hai xâu — DP 2D O(n·m).",
+        relatedProblemId: "16",
+        roadmapId: "string",
+        sections: [
+            {
+                title: "Định nghĩa",
+                content: "Xâu con chung là dãy ký tự xuất hiện đúng thứ tự ở cả hai xâu, nhưng không cần liên tiếp."
+            },
+            {
+                title: "DP",
+                content: "dp[i][j] = LCS của prefix x1[0..i) và x2[0..j).\nNếu x1[i-1] == x2[j-1]: dp[i][j] = dp[i-1][j-1] + 1\nNgược lại: dp[i][j] = max(dp[i-1][j], dp[i][j-1])"
+            }
+        ]
     }
 ];
 
 export const TOPIC_LABELS = {
-    graph: "Graph",
-    dp: "Dynamic Programming",
-    tree: "Tree"
+    graph: "Đồ thị",
+    dp: "Quy hoạch động",
+    tree: "Cây",
+    recursion: "Đệ quy",
+    "data-structure": "Cấu trúc dữ liệu",
+    "sorting-search": "Sắp xếp và Tìm kiếm",
+    greedy: "Tham lam",
+    math: "Toán",
+    string: "Xâu"
 };
 
 export function getLessonById(id) {

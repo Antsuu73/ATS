@@ -130,13 +130,101 @@ export const PROBLEMS = [
         ],
         constraints: "Số nút ≤ 10^4"
     },
+    {
+        id: "11",
+        title: "Tower of Hanoi",
+        topic: "recursion",
+        tag: "Recursion",
+        difficulty: "Medium",
+        rating: 1200,
+        description: "Cho 3 cột A, B, C và n đĩa trên cột A. Chuyển n đĩa sang cột C theo quy tắc: mỗi lần chỉ chuyển 1 đĩa, không đặt đĩa lớn lên đĩa nhỏ.",
+        examples: [
+            { input: "n=3", output: "7" }
+        ],
+        constraints: "1 ≤ n ≤ 20"
+    },
+    {
+        id: "12",
+        title: "Valid Parentheses",
+        topic: "data-structure",
+        tag: "Stack",
+        difficulty: "Easy",
+        rating: 900,
+        description: "Kiểm tra chuỗi ngoặc có hợp lệ không. Các ngoặc hợp lệ: '()', '{}', '[]'.",
+        examples: [
+            { input: 's="()[]{}"', output: "true" },
+            { input: 's="(]"', output: "false" }
+        ],
+        constraints: "1 ≤ |s| ≤ 10^4"
+    },
+    {
+        id: "13",
+        title: "Binary Search",
+        topic: "sorting-search",
+        tag: "Binary Search",
+        difficulty: "Easy",
+        rating: 800,
+        description: "Cho mảng đã sắp xếp và giá trị target. Trả về index của target nếu có, ngược lại -1.",
+        examples: [
+            { input: "nums=[-1,0,3,5,9,12], target=9", output: "4" }
+        ],
+        constraints: "1 ≤ n ≤ 10^4"
+    },
+    {
+        id: "14",
+        title: "Fractional Knapsack",
+        topic: "greedy",
+        tag: "Greedy",
+        difficulty: "Medium",
+        rating: 1100,
+        description: "Cho n vật với trọng lượng và giá trị. Chọn phần hoặc toàn bộ vật để tổng trọng lượng ≤ W và giá trị lớn nhất.",
+        examples: [
+            { input: "n=3, W=50, v=[60,100,120], w=[10,20,30]", output: "240.0" }
+        ],
+        constraints: "1 ≤ n ≤ 10^3"
+    },
+    {
+        id: "15",
+        title: "Số nguyên tố",
+        topic: "math",
+        tag: "Math",
+        difficulty: "Easy",
+        rating: 850,
+        description: "Kiểm tra số nguyên dương n có phải số nguyên tố hay không.",
+        examples: [
+            { input: "n=17", output: "true" },
+            { input: "n=18", output: "false" }
+        ],
+        constraints: "1 ≤ n ≤ 10^9"
+    },
+    {
+        id: "16",
+        title: "Palindrome",
+        topic: "string",
+        tag: "String",
+        difficulty: "Easy",
+        rating: 750,
+        description: "Kiểm tra xâu s có đối xứng (palindrome) hay không. Bỏ qua ký tự không phải chữ cái/chữ số và không phân biệt hoa thường.",
+        examples: [
+            { input: 's="A man, a plan, a canal: Panama"', output: "true" },
+            { input: 's="race a car"', output: "false" }
+        ],
+        constraints: "1 ≤ |s| ≤ 2·10^5"
+    },
 
 ];
 
 export const TOPIC_LABELS = {
-    graph: "Graph",
-    dp: "Dynamic Programming",
-    tree: "Tree",
+    graph: "Đồ thị",
+    dp: "Quy hoạch động",
+    tree: "Cây",
+    recursion: "Đệ quy",
+    "data-structure": "Cấu trúc dữ liệu",
+    "sorting-search": "Sắp xếp và Tìm kiếm",
+    greedy: "Tham lam",
+    math: "Toán",
+    string: "Xâu",
+    other: "Khác"
 };
 
 export const DIFFICULTY_ORDER = { Easy: 1, Medium: 2, Hard: 3 };

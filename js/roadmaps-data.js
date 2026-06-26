@@ -159,6 +159,144 @@ export const ROADMAPS = [
                 content: "Tìm đường kính của cây nhị phân."
             }
         ]
+    },
+    {
+        id: "recursion",
+        title: "Đệ quy và Chia để trị",
+        level: "Beginner",
+        levelClass: "green-bg",
+        topic: "recursion",
+        description: "Làm chủ tư duy đệ quy: base case, recursive case, memoization.",
+        skills: ["Tower of Hanoi", "Fibonacci"],
+        steps: [
+            {
+                type: "learn",
+                title: "Tư duy Đệ quy",
+                lessonId: "recursion-intro",
+                content: "Đệ quy chia bài toán thành bài con nhỏ hơn. Cần base case để dừng và recursive case để tiếp tục."
+            },
+            {
+                type: "practice",
+                title: "Tower of Hanoi",
+                problemId: "11",
+                content: "Chuyển n đĩa theo quy tắc với số bước tối thiểu."
+            }
+        ]
+    },
+    {
+        id: "data-structure",
+        title: "Cấu trúc dữ liệu cơ bản",
+        level: "Beginner",
+        levelClass: "green-bg",
+        topic: "data-structure",
+        description: "Học Stack và Queue — hai cấu trúc nền tảng dùng trong thuật toán.",
+        skills: ["Stack", "Queue", "Parentheses"],
+        steps: [
+            {
+                type: "learn",
+                title: "Stack và Queue",
+                lessonId: "stack-queue",
+                content: "Stack LIFO và Queue FIFO là hai cấu trúc dữ liệu cực kỳ phổ biến."
+            },
+            {
+                type: "practice",
+                title: "Valid Parentheses",
+                problemId: "12",
+                content: "Kiểm tra chuỗi ngoặc có hợp lệ không bằng Stack."
+            }
+        ]
+    },
+    {
+        id: "sorting-search",
+        title: "Sắp xếp và Tìm kiếm",
+        level: "Beginner",
+        levelClass: "green-bg",
+        topic: "sorting-search",
+        description: "Nắm vững các thuật toán sắp xếp cơ bản và tìm kiếm nhị phân.",
+        skills: ["Bubble Sort", "Binary Search"],
+        steps: [
+            {
+                type: "learn",
+                title: "Binary Search",
+                lessonId: "binary-search",
+                content: "Tìm kiếm nhị phân trên mảng đã sắp xếp — mỗi bước loại bỏ một nửa."
+            },
+            {
+                type: "practice",
+                title: "Binary Search",
+                problemId: "13",
+                content: "Triển khai tìm kiếm nhị phân."
+            }
+        ]
+    },
+    {
+        id: "greedy",
+        title: "Thuật toán Tham lam",
+        level: "Intermediate",
+        levelClass: "blue-bg",
+        topic: "greedy",
+        description: "Chọn phương án tối ưu cục bộ tại mỗi bước — không hối tiếc.",
+        skills: ["Fractional Knapsack", "Activity Selection"],
+        steps: [
+            {
+                type: "learn",
+                title: "Tư duy Tham lam",
+                lessonId: "greedy-intro",
+                content: "Greedy chọn giải pháp tốt nhất tại mỗi bước. Đúng khi bài toán có tính chất tối ưu cục bộ dẫn đến toàn cục."
+            },
+            {
+                type: "practice",
+                title: "Fractional Knapsack",
+                problemId: "14",
+                content: "Chọn vật để tổng giá trị lớn nhất với giới hạn trọng lượng W."
+            }
+        ]
+    },
+    {
+        id: "math",
+        title: "Toán trong Lập trình",
+        level: "Intermediate",
+        levelClass: "blue-bg",
+        topic: "math",
+        description: "Số nguyên tố, modulo, và các kỹ thuật toán cơ bản.",
+        skills: ["Số nguyên tố", "Sàng Eratosthenes"],
+        steps: [
+            {
+                type: "learn",
+                title: "Số nguyên tố và modulo",
+                lessonId: "prime-sieve",
+                content: "Kiểm tra số nguyên tố O(sqrt(n)) và sàng Eratosthenes O(n log log n)."
+            },
+            {
+                type: "practice",
+                title: "Số nguyên tố",
+                problemId: "15",
+                content: "Kiểm tra n có phải số nguyên tố."
+            }
+        ]
+    },
+    {
+        id: "string",
+        title: "Xử lý Xâu",
+        level: "Intermediate",
+        levelClass: "blue-bg",
+        topic: "string",
+        description: "Palindrome, LCS và các kỹ thuật xử lý xâu phổ biến.",
+        skills: ["Palindrome", "LCS"],
+        steps: [
+            {
+                type: "learn",
+                title: "Xâu con chung dài nhất (LCS)",
+                lessonId: "lcs",
+                content: "LCS tìm dãy ký tự chung dài nhất giữa hai xâu bằng DP 2D."
+            },
+            {
+                type: "practice",
+                title: "Palindrome",
+                problemId: "16",
+                content: "Kiểm tra xâu đối xứng (palindrome)."
+            }
+        ]
     }
 ];
 
