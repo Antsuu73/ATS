@@ -277,11 +277,11 @@ export function getLocalPosts() {
     }
 }
 
-function saveLocalPosts(posts) {
+export function saveLocalPosts(posts) {
     localStorage.setItem("ats_community_posts", JSON.stringify(posts));
 }
 
-function getLocalComments() {
+export function getLocalComments() {
     try {
         const raw = localStorage.getItem("ats_community_comments");
         return raw ? JSON.parse(raw) : [];
@@ -290,7 +290,7 @@ function getLocalComments() {
     }
 }
 
-function saveLocalComments(comments) {
+export function saveLocalComments(comments) {
     localStorage.setItem("ats_community_comments", JSON.stringify(comments));
 }
 
