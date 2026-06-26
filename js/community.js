@@ -167,10 +167,6 @@ function renderPostDetail(post, comments) {
 
     document.getElementById("btnBackList")?.addEventListener("click", hideDetail);
     detailEl.querySelector(".btn-like-detail")?.addEventListener("click", () => onLike(post.id));
-    detailEl.querySelector("#commentForm")?.addEventListener("submit", (e) => {
-        e.preventDefault();
-        onAddComment(post.id);
-    });
 
     currentPostId = post.id;
     window.scrollTo(0, 0);
@@ -352,6 +348,22 @@ function init() {
     if (btnCancelCompose) btnCancelCompose.addEventListener("click", closeCompose);
 
     composeModal?.querySelector(".community-modal-backdrop")?.addEventListener("click", closeCompose);
+
+    if (composeForm) {
+        composeForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            submitCompose(e);
+        });
+    }
+
+    if (detailEl) {
+        detailEl.addEventListener("submit", (e) => {
+            if (e.target.id === "commentForm") {
+                e.preventDefault();
+                onAddComment(currentPostId);
+            }
+        });
+    }
 
     if (searchEl) {
         searchEl.addEventListener("input", (e) => {
