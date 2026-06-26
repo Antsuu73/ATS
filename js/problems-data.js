@@ -136,7 +136,7 @@ export const PROBLEMS = [
 export const TOPIC_LABELS = {
     graph: "Graph",
     dp: "Dynamic Programming",
-    tree: "Tree"
+    tree: "Tree",
 };
 
 export const DIFFICULTY_ORDER = { Easy: 1, Medium: 2, Hard: 3 };

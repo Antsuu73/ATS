@@ -111,7 +111,9 @@
     line-height: 1.75;
 }
 
-.viz-stage {
+.viz-stage { height: 280px; overflow: hidden;
+    height: 280px;
+    overflow: hidden;
     min-height: 280px;
     background: var(--hover-bg);
     border: 1px solid var(--border);
@@ -625,5 +627,6 @@
         width: 100%;
     }
 }
+
 
 
