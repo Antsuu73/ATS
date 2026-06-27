@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com https://www.google.com; script-src-elem 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com https://www.google.com; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' https: data: blob:; connect-src 'self' https://*.googleapis.com https://*.google.com https://*.gstatic.com https://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com wss://*.firebaseio.com; frame-src 'self' https://accounts.google.com https://*.firebaseapp.com https://www.google.com https://apis.google.com; base-uri 'self'; form-action 'self';">
+    <title>Arena - ATS</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/arena.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- Navbar -->
+
+    <header class="navbar">
+
+        <div class="container nav-container">
+
+            <a href="index.html" class="logo">
+                ATS
+            </a>
+
+            <nav class="nav-menu">
+
+                <a href="index.html">Home</a>
+                <a href="roadmaps.html">Roadmaps</a>
+                <a href="lessons.html">Lessons</a>
+                <a href="problems.html">Practice</a>
+                <a href="visualizers.html">Visualizers</a>
+                <a href="community.html">Community</a>
+                <a href="arena.html" class="active">Arena</a>
+
+            </nav>
+
+            <div class="auth-area">
+                <button id="themeToggleBtn" class="btn-secondary" style="margin-right: 12px; padding: 10px; border-radius: 50%; font-size: 16px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer;" aria-label="Toggle theme">
+                    ☀️
+                </button>
+                <a href="login.html" class="btn-login" id="loginBtn">Login</a>
+
+                <div id="userBox" class="user-box" style="display:none;">
+                    <div id="userDisplay" class="user-display"></div>
+                    <button id="logoutBtn" class="btn-logout" type="button">Logout</button>
+                </div>
+            </div>
+
+        </div>
+
+    </header>
+
+    <!-- Main Content -->
+
+    <main class="arena-page">
+
+        <div class="container">
+
+            <div class="arena-header">
+                <div class="arena-header-top">
+                    <div>
+                        <h1>Arena</h1>
+                        <p>
+                            Tạo và giải bài tập cùng nhau. Mỗi người có thể đặt thử thách riêng
+                            với input và output xác định, sau đó cùng nhau giải.
+                        </p>
+                    </div>
+                    <button id="btnCreate" class="btn-primary btn-create" type="button">
+                        + Tạo bài mới
+                    </button>
+                </div>
+            </div>
+
+            <div class="arena-toolbar">
+                <input id="arenaSearch" class="arena-search" type="search"
+                    placeholder="Tìm theo tiêu đề, tác giả...">
+
+                <div class="filter-group">
+                    <button class="filter-btn active" data-filter="difficulty" data-value="all" type="button">Mọi độ khó</button>
+                    <button class="filter-btn" data-filter="difficulty" data-value="Easy" type="button">Easy</button>
+                    <button class="filter-btn" data-filter="difficulty" data-value="Medium" type="button">Medium</button>
+                    <button class="filter-btn" data-filter="difficulty" data-value="Hard" type="button">Hard</button>
+                </div>
+
+                <div class="filter-group">
+                    <button class="filter-btn active" data-filter="status" data-value="all" type="button">Tất cả</button>
+                    <button class="filter-btn" data-filter="status" data-value="solved" type="button">Đã giải</button>
+                    <button class="filter-btn" data-filter="status" data-value="unsolved" type="button">Chưa giải</button>
+                </div>
+            </div>
+
+            <div id="arenaStats" class="arena-stats"></div>
+
+            <div id="arenaList" class="arena-list"></div>
+
+            <!-- Detail View -->
+
+            <div id="arenaDetail" class="arena-detail-wrapper" style="display:none;"></div>
+
+            <!-- Create Modal -->
+
+            <div id="createModal" class="arena-modal" style="display:none;">
+
+                <div class="arena-modal-backdrop" id="createModalBackdrop"></div>
+
+                <div class="arena-modal-content">
+
+                    <div class="arena-modal-header">
+                        <h2>Tạo bài tập mới</h2>
+                        <button id="btnCloseCreate" class="btn-close-modal" type="button">✕</button>
+                    </div>
+
+                    <form id="createForm" class="arena-form">
+
+                        <div class="form-group">
+                            <label for="createTitle">Tiêu đề</label>
+                            <input id="createTitle" class="arena-input" type="text"
+                                placeholder="Ví dụ: Đếm số cặp ngoặc hợp lệ" required maxlength="200">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="createDescription">Đề bài</label>
+                            <textarea id="createDescription" class="arena-textarea" rows="5"
+                                placeholder="Mô tả chi tiết bài toán..." required maxlength="5000"></textarea>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="createDifficulty">Độ khó</label>
+                                <select id="createDifficulty" class="arena-select">
+                                    <option value="Easy">Easy</option>
+                                    <option value="Medium" selected>Medium</option>
+                                    <option value="Hard">Hard</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="createRating">Rating</label>
+                                <input id="createRating" class="arena-input" type="number"
+                                    placeholder="Ví dụ: 1200" min="0" max="4000" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="createInput">Input mẫu</label>
+                            <textarea id="createInput" class="arena-textarea" rows="3"
+                                placeholder="Ví dụ: n=5, edges=[[1,2],[2,3]], s=1, t=3" required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="createOutput">Output mẫu</label>
+                            <textarea id="createOutput" class="arena-textarea" rows="2"
+                                placeholder="Ví dụ: 2" required></textarea>
+                        </div>
+
+                        <div class="arena-form-actions">
+                            <button type="button" id="btnCancelCreate" class="btn-secondary">Hủy</button>
+                            <button type="submit" class="btn-primary">Đăng bài</button>
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <script src="js/theme.js" type="module"></script>
+    <script src="js/animations.js" defer></script>
+    <script src="js/mobile-nav.js" defer></script>
+
+    <script type="module" src="js/auth.js"></script>
+    <script type="module" src="js/arena.js"></script>
+</body>
+
+</html>

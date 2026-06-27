@@ -37,6 +37,17 @@ service cloud.firestore {
         allow update, delete: if isOwner(resource.data.authorId);
       }
     }
+
+    // Arena — bài tập tùy chỉnh do người dùng tạo
+    match /customProblems/{problemId} {
+      allow read: if true;
+      allow create: if isSignedIn() && request.resource.data.authorId == request.auth.uid;
+      allow update: if isSignedIn() && (
+        resource.data.authorId == request.auth.uid ||
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(["solvedBy", "updatedAt"])
+      );
+      allow delete: if isOwner(resource.data.authorId);
+    }
   }
 }
 
