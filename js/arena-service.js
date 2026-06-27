@@ -24,7 +24,7 @@ function generateId() {
     return `custom_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
 }
 
-function timeAgo(ts) {
+export function timeAgo(ts) {
     const diff = Date.now() - ts;
     const seconds = Math.floor(diff / 1000);
     if (seconds < 60) return `${seconds} giây trước`;

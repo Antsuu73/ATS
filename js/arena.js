@@ -9,7 +9,8 @@ import {
     markCustomProblemSolved,
     isLocalSolvedCustomProblem,
     addLocalSolvedCustomProblem,
-    normalizeCustomProblem
+    normalizeCustomProblem,
+    timeAgo
 } from "./arena-service.js";
 
 let allProblems = [];
