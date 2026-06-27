@@ -213,10 +213,19 @@ export const PROBLEMS = [
     },
 
     {
-        id: " 17",
-        title
+        id: "17",
+        title: "Valid Parentheses",
+        topic: "data-structure",
+        tag: "Stack",
+        difficulty: "Easy",
+        rating: 800,
+        description: "Kiểm tra xâu dấu ngoặc có hợp lệ không: mỗi dấu đóng phải khớp với dấu mở đúng loại theo thứ tự.",
+        examples: [
+            { input: 's = "()[]{}"', output: "true" },
+            { input: 's = "(]"', output: "false" }
+        ],
+        constraints: "1 ≤ |s| ≤ 10^4"
     }
-
 ];
 
 export const TOPIC_LABELS = {
