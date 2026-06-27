@@ -24,23 +24,9 @@ function generateId() {
     return `custom_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
 }
 
-export function timeAgo(ts) {
-    const diff = Date.now() - ts;
-    const seconds = Math.floor(diff / 1000);
-    if (seconds < 60) return `${seconds} giây trước`;
-    const minutes = Math.floor(diff / 60);
-    if (minutes < 60) return `${minutes} phút trước`;
-    const hours = Math.floor(minutes / 60);
-    if (hours < 24) return `${hours} giờ trước`;
-    const days = Math.floor(hours / 24);
-    if (days < 30) return `${days} ngày trước`;
-    const months = Math.floor(days / 30);
-    return `${months} tháng trước`;
-}
-
 export function normalizeCustomProblem(raw, docId) {
     return {
-        id: String(raw.id ?? docId ?? ""),
+        id: String(docId ?? raw.id ?? ""),
         title: raw.title || "Không có tiêu đề",
         description: raw.description || "",
         difficulty: raw.difficulty || "Medium",

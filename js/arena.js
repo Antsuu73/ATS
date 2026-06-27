@@ -9,9 +9,22 @@ import {
     markCustomProblemSolved,
     isLocalSolvedCustomProblem,
     addLocalSolvedCustomProblem,
-    normalizeCustomProblem,
-    timeAgo
+    normalizeCustomProblem
 } from "./arena-service.js";
+
+function timeAgo(ts) {
+    const diff = Date.now() - ts;
+    const seconds = Math.floor(diff / 1000);
+    if (seconds < 60) return `${seconds} giây trước`;
+    const minutes = Math.floor(diff / 60);
+    if (minutes < 60) return `${minutes} phút trước`;
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `${hours} giờ trước`;
+    const days = Math.floor(hours / 24);
+    if (days < 30) return `${days} ngày trước`;
+    const months = Math.floor(days / 30);
+    return `${months} tháng trước`;
+}
 
 let allProblems = [];
 let filtered = [];
