@@ -1141,3 +1141,211 @@ export function createTreeBfsEngine(container, logEl) {
     reset();
     return { reset, step };
 }
+
+// ==================== JUMP SEARCH ====================
+export function createJumpSearchEngine(container, logEl) {
+    const data = [2, 5, 8, 12, 16, 23, 38, 56, 72, 91];
+    const block = Math.floor(Math.sqrt(data.length));
+    let step = 0;
+    let low = 0;
+    let high = block;
+    let done = false;
+
+    function getTarget() {
+        const input = container.closest(".viz-panel")?.querySelector(".viz-target-input");
+        return Number(input?.value) || 23;
+    }
+
+    function log(msg) {
+        if (logEl) logEl.textContent = msg;
+    }
+
+    function render() {
+        const target = getTarget();
+        const arrEl = container.querySelector(".viz-array") || container;
+        arrEl.innerHTML = data.map((val, idx) => {
+            let cls = "viz-cell-value";
+            if (idx >= low && idx < high && !done) cls += " range";
+            if (done && idx === low) cls += " found";
+
+            let pointer = "";
+            if (idx === low && !done) pointer = "L";
+            if (idx === high && high <= data.length && !done) pointer = "H";
+
+            return `
+                <div class="viz-cell">
+                    <span class="viz-cell-pointer">${pointer}</span>
+                    <span class="${cls}">${val}</span>
+                </div>
+            `;
+        }).join("");
+
+        if (!done) {
+            log(`Nhảy block=${block}. low=${low}, high=${Math.min(high, data.length)} | Tìm ${target}`);
+        }
+    }
+
+    function reset() {
+        step = 0; low = 0; high = block; done = false;
+        render();
+        log(`Jump Search (block=${block}). Nhập target (mặc định 23) rồi Step.`);
+    }
+
+    function doStep() {
+        if (done) return false;
+        const target = getTarget();
+
+        if (step === 0) {
+            log(`Nhảy đến block kết thúc tại index ${Math.min(high, data.length) - 1}`);
+            step++;
+            high = Math.min(high, data.length);
+            render();
+            if (high <= low) {
+                low = high - 1;
+                high = low + block;
+                step++;
+            }
+            return true;
+        }
+
+        if (data[high - 1] < target && high < data.length) {
+            low = high;
+            high = low + block;
+            high = Math.min(high, data.length);
+            log(`Tăng low=${low}, high=${high}`);
+            render();
+            step++;
+            return true;
+        }
+
+        done = true;
+        render();
+        log(`Trong khối [${low}..${high-1}], dùng linear search`);
+        return true;
+    }
+
+    function linearStep() {
+        if (done && low >= data.length) return false;
+        if (low >= data.length) return false;
+
+        if (data[low] === target) {
+            done = true;
+            render();
+            log(`Tìm thấy ${target} tại index ${low}!`);
+            return false;
+        }
+        log(`So sánh arr[${low}]=${data[low]} với ${target}`);
+        low++;
+        if (low >= high && low < data.length && data[low - 1] < target) {
+            done = true;
+            render();
+            log(`Không tìm thấy ${target}`);
+            return false;
+        }
+        render();
+        return true;
+    }
+
+    let phase = "jump";
+    const engine = {
+        reset,
+        step: () => {
+            if (phase === "jump") {
+                const cont = doStep();
+                if (!cont) phase = "linear";
+                return phase === "linear";
+            } else {
+                return linearStep();
+            }
+        }
+    };
+
+    reset();
+    return engine;
+}
+
+// ==================== COUNTING SORT ====================
+export function createCountingSortEngine(container, logEl) {
+    const initial = [4, 2, 2, 8, 3, 3, 1, 5, 6, 4];
+    let arr = [...initial];
+    let i = 0;
+    let phase = "count";
+
+    function log(msg) {
+        if (logEl) logEl.textContent = msg;
+    }
+
+    function renderBars(highlightIdx = -1, sortedFrom = arr.length) {
+        const stage = container.querySelector(".viz-bars") || container;
+        stage.innerHTML = arr.map((val, idx) => {
+            let cls = "viz-bar";
+            if (idx === highlightIdx) cls += " compare";
+            if (idx >= sortedFrom) cls += " sorted";
+            const h = Math.max(24, val * 18);
+            return `
+                <div class="viz-bar-wrap">
+                    <div class="${cls}" style="height:${h}px" data-i="${idx}"></div>
+                    <span class="viz-bar-label">${val}</span>
+                </div>
+            `;
+        }).join("");
+    }
+
+    function renderCounts(counts) {
+        const max = Math.max(...counts);
+        container.innerHTML = `
+            <div class="viz-counts">
+                ${counts.map((c, i) => `
+                    <div class="viz-count-item ${c > 0 ? "active" : ""}">
+                        <span class="viz-count-val">${i}</span>
+                        <div class="viz-count-bar" style="height:${Math.max(4, c * 16)}px"></div>
+                        <span class="viz-count-num">${c}</span>
+                    </div>
+                `).join("")}
+            </div>
+        `;
+    }
+
+    function reset() {
+        arr = [...initial];
+        i = 0;
+        phase = "count";
+        renderBars();
+        log("Counting Sort. Nhấn Step.");
+    }
+
+    function step() {
+        if (i >= arr.length) {
+            if (phase === "count") {
+                phase = "output";
+                i = 0;
+                arr = arr.map((_, idx) => idx + 1);
+                renderBars(-1, 0);
+                log("Đếm xong. Bắt đầu đưa về đúng vị trí.");
+                return true;
+            }
+            log("Hoàn thành Counting Sort!");
+            return false;
+        }
+
+        if (phase === "count") {
+            renderBars(i);
+            log(`Đếm: giá trị ${arr[i]} xuất hiện...`);
+            i++;
+            return true;
+        }
+
+        if (phase === "output") {
+            renderBars(-1, i);
+            log(`Đặt ${i + 1} vào vị trí ${i}`);
+            i++;
+            return true;
+        }
+
+        return false;
+    }
+
+    reset();
+    return { reset, step };
+}
+

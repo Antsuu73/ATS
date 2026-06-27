@@ -52,6 +52,26 @@ export const VISUALIZERS = [
         relatedLessonId: null
     },
     {
+        id: "heap-sort",
+        title: "Heap Sort",
+        topic: "sorting-search",
+        engine: "bar-sort",
+        algo: "heap",
+        description: "Dùng heap (cây nhị phân heap) để liên tục lấy phần tử lớn nhất/nhất đưa về cuối mảng.",
+        complexity: "O(n log n)",
+        relatedLessonId: null
+    },
+    {
+        id: "shell-sort",
+        title: "Shell Sort",
+        topic: "sorting-search",
+        engine: "bar-sort",
+        algo: "shell",
+        description: "Insertion sort với khoảng cách giảm dần giữa các phần tử được so sánh.",
+        complexity: "O(n log² n)",
+        relatedLessonId: null
+    },
+    {
         id: "linear-search",
         title: "Linear Search",
         topic: "sorting-search",
@@ -70,61 +90,12 @@ export const VISUALIZERS = [
         relatedLessonId: null
     },
     {
-        id: "insertion-sort",
-        title: "Insertion Sort",
-        topic: "sorting",
-        engine: "bar-sort",
-        algo: "insertion",
-        description: "Chèn từng phần tử vào đúng vị trí trong phần đã sắp xếp — giống cách sắp xếp bài trên tay.",
-        complexity: "O(n²)",
-        relatedLessonId: null
-    },
-    {
-        id: "selection-sort",
-        title: "Selection Sort",
-        topic: "sorting",
-        engine: "bar-sort",
-        algo: "selection",
-        description: "Mỗi vòng chọn phần tử nhỏ nhất trong phần chưa sắp xếp và đặt vào vị trí đúng.",
-        complexity: "O(n²)",
-        relatedLessonId: null
-    },
-    {
-        id: "quick-sort",
-        title: "Quick Sort",
-        topic: "sorting",
-        engine: "bar-sort",
-        algo: "quick",
-        description: "Chọn pivot, chia mảng thành phần nhỏ hơn và lớn hơn pivot, rồi sắp xếp đệ quy.",
-        complexity: "O(n log n)",
-        relatedLessonId: null
-    },
-    {
-        id: "merge-sort",
-        title: "Merge Sort",
-        topic: "sorting",
-        engine: "bar-sort",
-        algo: "merge",
-        description: "Chia đôi mảng, sắp xếp từng nửa rồi trộn (merge) hai nửa đã sắp xếp.",
-        complexity: "O(n log n)",
-        relatedLessonId: null
-    },
-    {
-        id: "linear-search",
-        title: "Linear Search",
-        topic: "search",
-        engine: "linear-search",
-        description: "Duyệt tuần tự từng phần tử cho đến khi tìm thấy giá trị cần tìm.",
-        complexity: "O(n)",
-        relatedLessonId: null
-    },
-    {
-        id: "binary-search",
-        title: "Binary Search",
-        topic: "search",
-        engine: "binary-search",
-        description: "Tìm kiếm nhị phân trên mảng đã sắp xếp — mỗi bước loại bỏ một nửa không gian tìm kiếm.",
-        complexity: "O(log n)",
+        id: "jump-search",
+        title: "Jump Search",
+        topic: "sorting-search",
+        engine: "jump-search",
+        description: "Nhảy có bước cố định trên mảng đã sắp xếp rồi linear search trong khối tìm thấy.",
+        complexity: "O(√n)",
         relatedLessonId: null
     },
     {
@@ -164,6 +135,24 @@ export const VISUALIZERS = [
         relatedLessonId: "topo-sort"
     },
     {
+        id: "prim",
+        title: "Prim's MST",
+        topic: "graph",
+        engine: "prim",
+        description: "Tìm cây khung nhỏ nhất (Minimum Spanning Tree) bằng Prim — mở rộng từ đỉnh nguồn.",
+        complexity: "O((V+E) log V)",
+        relatedLessonId: null
+    },
+    {
+        id: "bellman-ford",
+        title: "Bellman-Ford",
+        topic: "graph",
+        engine: "bellman-ford",
+        description: "Tìm đường đi ngắn nhất từ một nguồn trên đồ thị có trọng số âm — phát hiện chu trình âm.",
+        complexity: "O(V·E)",
+        relatedLessonId: null
+    },
+    {
         id: "knapsack",
         title: "0/1 Knapsack (DP)",
         topic: "dp",
@@ -191,6 +180,24 @@ export const VISUALIZERS = [
         relatedLessonId: "lis"
     },
     {
+        id: "lcs",
+        title: "Longest Common Subsequence",
+        topic: "dp",
+        engine: "lcs",
+        description: "DP 2D tìm xâu con chung dài nhất giữa hai xâu.",
+        complexity: "O(n·m)",
+        relatedLessonId: "lcs"
+    },
+    {
+        id: "edit-distance",
+        title: "Edit Distance",
+        topic: "dp",
+        engine: "edit-distance",
+        description: "DP đếm số phép chỉnh sửa tối thiểu để biến xâu A thành xâu B (chèn, xóa, thay).",
+        complexity: "O(n·m)",
+        relatedLessonId: null
+    },
+    {
         id: "stack",
         title: "Stack (LIFO)",
         topic: "data-structure",
@@ -209,6 +216,24 @@ export const VISUALIZERS = [
         relatedLessonId: null
     },
     {
+        id: "linked-list",
+        title: "Linked List",
+        topic: "data-structure",
+        engine: "linked-list",
+        description: "Danh sách liên kết — chèn/xóa ở đầu O(1), truy cập tuần tự O(n).",
+        complexity: "O(n)",
+        relatedLessonId: null
+    },
+    {
+        id: "heap-pq",
+        title: "Heap / Priority Queue",
+        topic: "data-structure",
+        engine: "heap-pq",
+        description: "Cây nhị phân heap — min-heap/max-heap, đẩy/pop O(log n).",
+        complexity: "O(log n)",
+        relatedLessonId: null
+    },
+    {
         id: "tree-bfs",
         title: "Tree BFS (Level Order)",
         topic: "tree",
@@ -216,6 +241,87 @@ export const VISUALIZERS = [
         description: "Duyệt cây nhị phân theo tầng — từ gốc xuống từng level.",
         complexity: "O(n)",
         relatedLessonId: "tree-traversal"
+    },
+    {
+        id: "tree-dfs",
+        title: "Tree DFS Traversal",
+        topic: "tree",
+        engine: "tree-dfs",
+        description: "Duyệt cây nhị phân theo chiều sâu: Preorder, Inorder, Postorder.",
+        complexity: "O(n)",
+        relatedLessonId: "tree-traversal"
+    },
+    {
+        id: "hanoi",
+        title: "Tower of Hanoi",
+        topic: "recursion",
+        engine: "hanoi",
+        description: "Chuyển n đĩa từ cột A sang C qua B, không đặt đĩa lớn lên nhỏ.",
+        complexity: "O(2^n)",
+        relatedLessonId: "recursion-intro"
+    },
+    {
+        id: "fibonacci",
+        title: "Fibonacci",
+        topic: "recursion",
+        engine: "fibonacci",
+        description: "Dãy Fibonacci F(n) = F(n-1) + F(n-2). So sánh đệ quy thường vs memo.",
+        complexity: "O(2^n) → O(n)",
+        relatedLessonId: "recursion-intro"
+    },
+    {
+        id: "activity-selection",
+        title: "Activity Selection",
+        topic: "greedy",
+        engine: "activity-selection",
+        description: "Chọn nhiều hoạt động nhất: chọn hoạt động kết thúc sớm nhất trước.",
+        complexity: "O(n log n)",
+        relatedLessonId: "greedy-intro"
+    },
+    {
+        id: "fractional-knapsack",
+        title: "Fractional Knapsack",
+        topic: "greedy",
+        engine: "frac-knapsack",
+        description: "Greedy theo value/weight — lấy hết vật hiệu suất cao nhất trước.",
+        complexity: "O(n log n)",
+        relatedLessonId: null
+    },
+    {
+        id: "gcd",
+        title: "GCD (Euclidean)",
+        topic: "math",
+        engine: "gcd",
+        description: "Ước chung lớn nhất bằng thuật toán Euclid: gcd(a,b) = gcd(b, a mod b).",
+        complexity: "O(log min(a,b))",
+        relatedLessonId: "prime-sieve"
+    },
+    {
+        id: "sieve",
+        title: "Sieve of Eratosthenes",
+        topic: "math",
+        engine: "sieve",
+        description: "Sàng số nguyên tố đến n — đánh dấu bội của các số nguyên tố nhỏ.",
+        complexity: "O(n log log n)",
+        relatedLessonId: "prime-sieve"
+    },
+    {
+        id: "palindrome",
+        title: "Palindrome Check",
+        topic: "string",
+        engine: "palindrome",
+        description: "Kiểm tra xâu đối xứng bằng hai con trỏ so sánh từ ngoài vào trong.",
+        complexity: "O(n)",
+        relatedLessonId: "lcs"
+    },
+    {
+        id: "kmp",
+        title: "KMP Pattern Search",
+        topic: "string",
+        engine: "kmp",
+        description: "KMP: dùng bảng lps (longest prefix suffix) để bỏ qua so khớp lại.",
+        complexity: "O(n+m)",
+        relatedLessonId: null
     }
 ];
 
